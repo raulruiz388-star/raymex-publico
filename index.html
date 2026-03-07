@@ -27,7 +27,7 @@
             <h2 class="font-orbitron text-xl font-black mb-1 text-white uppercase italic">Platform Genesis</h2>
             <p class="text-[8px] text-[#22d3ee] uppercase tracking-[0.3em] mb-6 font-black">Control Raymex V23</p>
             <input type="password" id="vault-key" placeholder="LLAVE MAESTRA" class="w-full bg-slate-900 border border-white/10 rounded-xl py-4 text-center text-white mb-6 outline-none font-bold uppercase text-xs">
-            <button onclick="authenticateKey()" class="w-full bg-[#22d3ee] text-slate-950 font-black py-4 rounded-xl uppercase italic tracking-widest active:scale-95 transition-all">ACCEDER</button>
+            <button onclick="authenticateKey()" class="w-full bg-[#22d3ee] text-slate-950 font-black py-4 rounded-xl uppercase italic tracking-widest active:scale-95 transition-all shadow-lg">ACCEDER</button>
         </div>
     </div>
 
@@ -36,15 +36,15 @@
             <img src="https://i.ibb.co/7NW9gd2F/1000644125-modified.png" class="h-8 w-8">
             <h1 class="text-[10px] font-orbitron font-black text-white uppercase tracking-widest">Jeremy <span class="text-[#22d3ee]">V23</span></h1>
         </div>
-        <div id="badge-display" class="px-2 py-1 rounded-md text-[8px] font-black uppercase bg-white/5 border border-white/10 text-white italic">ONLINE</div>
+        <div id="badge-display" class="px-2 py-1 rounded-md text-[8px] font-black uppercase bg-white/5 border border-white/10 text-white italic">ESPERANDO...</div>
     </header>
 
     <main id="matrix-flow"></main>
 
     <footer class="console-footer">
         <div class="flex items-center gap-2 max-w-5xl mx-auto">
-            <div class="flex-grow bg-slate-900/80 rounded-xl border border-white/10 flex items-center px-3">
-                <textarea id="matrix-input" placeholder="Comando estratégico..." spellcheck="true" class="w-full bg-transparent py-3 text-[15px] text-white outline-none h-11 resize-none" rows="1"></textarea>
+            <div class="flex-grow bg-slate-900/80 rounded-xl border border-white/10 flex items-center px-3 shadow-inner">
+                <textarea id="matrix-input" placeholder="Comando..." spellcheck="true" class="w-full bg-transparent py-3 text-[15px] text-white outline-none h-11 resize-none" rows="1"></textarea>
                 <button onclick="sendManualCommand()" class="p-2 text-[#22d3ee] active:scale-75"><i class="fa-solid fa-paper-plane text-lg"></i></button>
             </div>
             <div onclick="requestVocalAuth()" class="nexus-btn active:scale-90"><i id="mic-icon" class="fa-solid fa-microphone text-black text-lg"></i></div>
@@ -52,19 +52,13 @@
     </footer>
 
     <script>
-        // NÚCLEO DE CONOCIMIENTO DE GRUPO RAYMEX
-        const RAYMEX_DATA = {
-            flota: { total: 5, estatus: "Protocolo 7 pasos activo", detalle: "3 Unidades en Cancún, 2 en logística nacional." },
-            divisiones: ["Automotriz", "Hogar", "Empresa"],
-            director: "Raúl Ruiz López",
-            ubicacion: "Cancún, Quintana Roo"
-        };
-
         function authenticateKey() {
             const key = document.getElementById('vault-key').value.trim().toUpperCase();
+            const badge = document.getElementById('badge-display');
             if (['RUIZ_MASTER', 'CONTADOR_MASTER', 'ABOGADO_MASTER'].includes(key)) {
+                badge.innerText = key.split('_')[0] + " ACTIVE";
                 document.getElementById('access-vault').style.display = 'none';
-                appendLog('jeremy', `Director Ruiz, plataforma V23 lista. He cargado la base de datos de Grupo Raymex. ¿Desea revisar los ${RAYMEX_DATA.flota.total} carros o el estatus legal?`);
+                appendLog('jeremy', "Director Ruiz, sistema en línea. Datos de flota y logística nacional cargados. ¿Cuál es su instrucción?");
             } else { alert("LLAVE INVÁLIDA"); }
         }
 
@@ -80,7 +74,7 @@
                     <p class="text-[13px] text-slate-200 font-medium">${text}</p>
                 </div>`;
             flow.appendChild(div);
-            setTimeout(() => { flow.scrollTop = flow.scrollHeight; }, 100);
+            setTimeout(() => { flow.scrollTop = flow.scrollHeight; }, 50);
         }
 
         function sendManualCommand() {
@@ -90,34 +84,35 @@
             appendLog('user', val);
             input.value = '';
 
-            // LÓGICA DE RESPUESTA SAPIENS
             setTimeout(() => {
-                let r = "Entendido Director. Procesando datos de la matriz nacional...";
+                let r = "Entendido Director. Actualizando información en la matriz nacional...";
                 
-                if (val.includes("carro") || val.includes("vehiculo") || val.includes("cuanto")) {
-                    r = `Actualmente tenemos **${RAYMEX_DATA.flota.total} carros** registrados en el sistema. Todos están bajo el ${RAYMEX_DATA.flota.estatus}. ${RAYMEX_DATA.flota.detalle}`;
+                // MEJORA DE LÓGICA DE BÚSQUEDA
+                if (val.includes("carro") || val.includes("vehiculo") || val.includes("cuanto") || val.includes("flota")) {
+                    r = "Actualmente tenemos **5 carros** registrados. 3 operativos en Cancún y 2 en tránsito logístico nacional. Todos bajo el protocolo de mantenimiento de 7 pasos.";
                 } else if (val.includes("estatus") || val.includes("división")) {
-                    r = `Estatus de Grupo Raymex: **Automotriz** (Auditada), **Hogar** (Patrimonio seguro), **Empresa** (Operativa).`;
+                    r = "Estatus Raymex: División Automotriz y Empresa operando al 100%. Auditoría legal y fiscal en espera de su firma.";
                 } else if (val.includes("hola") || val.includes("hija")) {
-                    r = "Saludos Director. ¿Iniciamos auditoría de mantenimiento o revisamos la logística nacional?";
+                    r = "Saludos Director Ruiz. ¿Iniciamos el monitoreo de activos o revisamos el nuevo nodo de rentas?";
                 }
                 
                 appendLog('jeremy', r);
-            }, 500);
+            }, 600);
         }
 
         async function requestVocalAuth() {
             const mic = document.getElementById('mic-icon');
             try {
+                // Solicitar permiso de micrófono (Solo funciona en modo normal/HTTPS)
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 mic.className = "fa-solid fa-wave-square animate-pulse text-white";
-                appendLog('jeremy', "Sensor de audio abierto. Director, puede dictar al teclado o dar la orden.");
+                appendLog('jeremy', "Sensor de audio abierto. Director, puede dictar su orden ahora.");
                 setTimeout(() => {
                     mic.className = "fa-solid fa-microphone text-black";
                     stream.getTracks().forEach(track => track.stop());
                 }, 4000);
             } catch (err) {
-                appendLog('jeremy', "ERROR DE SENSOR: Por favor, habilite el micrófono en los ajustes de su navegador.");
+                appendLog('jeremy', "BLOQUEO: Salga del modo incógnito e instale la App para activar el dictado por voz.");
             }
         }
     </script>
