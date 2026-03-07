@@ -9,100 +9,89 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root { --matrix-cyan: #22d3ee; --dark-bg: #020617; }
-        body { 
-            font-family: 'Urbanist', sans-serif; background: var(--dark-bg); 
-            height: 100dvh; margin: 0; display: flex; flex-direction: column;
-            overflow: hidden; position: fixed; width: 100%;
+        body, html { 
+            height: 100%; height: 100svh; margin: 0; padding: 0;
+            background: var(--dark-bg); color: #f8fafc;
+            font-family: 'Urbanist', sans-serif; overflow: hidden;
         }
-        .glass-panel { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
+        .glass-panel { background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
         
-        /* Contenedor con Scroll Automático */
         #matrix-flow { 
-            flex: 1; overflow-y: auto; padding: 20px; 
-            scroll-behavior: smooth; -webkit-overflow-scrolling: touch;
+            flex: 1; overflow-y: scroll; padding: 20px;
+            display: flex; flex-direction: column; gap: 16px;
+            -webkit-overflow-scrolling: touch;
         }
         #matrix-flow::-webkit-scrollbar { display: none; }
 
-        .console-container {
-            padding: 12px 16px;
-            padding-bottom: calc(env(safe-area-inset-bottom) + 10px);
-            background: var(--dark-bg); border-top: 1px solid rgba(255,255,255,0.05);
+        .console-footer {
+            padding: 12px;
+            padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
+            background: #020617; border-top: 1px solid rgba(22, 234, 234, 0.2);
         }
 
         .nexus-btn { 
-            width: 55px; height: 55px; border-radius: 16px; 
+            width: 54px; height: 54px; border-radius: 14px; 
             background: var(--matrix-cyan); display: flex; 
             align-items: center; justify-content: center; 
-            box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
-            flex-shrink: 0;
+            flex-shrink: 0; box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
         }
 
         #access-vault { position: fixed; inset: 0; z-index: 9999; background: var(--dark-bg); display: flex; align-items: center; justify-content: center; }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
-        
-        /* Burbujas de Chat */
-        .msg-jeremy { border-left: 3px solid var(--matrix-cyan); border-top-left-radius: 0; }
-        .msg-user { border-right: 3px solid #c5a059; border-top-right-radius: 0; }
     </style>
 </head>
-<body>
+<body class="flex flex-col">
 
     <div id="access-vault">
-        <div class="glass-panel p-10 rounded-[2.5rem] w-full max-w-sm text-center border-t-4 border-[#22d3ee]">
-            <div class="w-16 h-16 bg-slate-900 rounded-full mx-auto mb-4 flex items-center justify-center border-2 border-[#22d3ee]">
-                <span class="font-orbitron font-black text-xl text-white">GR</span>
-            </div>
-            <h2 class="font-orbitron text-xl font-black mb-1 text-white italic">PLATFORM GENESIS</h2>
-            <p class="text-[8px] text-[#22d3ee] uppercase tracking-[0.3em] mb-8 font-black">Control Raymex V23</p>
-            <input type="password" id="vault-key" placeholder="LLAVE MAESTRA" class="w-full bg-white/5 border border-white/10 rounded-2xl py-4 text-center text-white mb-6 outline-none font-bold uppercase text-xs">
-            <button onclick="authenticateKey()" class="w-full bg-[#22d3ee] text-slate-950 font-black py-4 rounded-2xl uppercase italic tracking-widest active:scale-95 transition-all">ACCEDER</button>
+        <div class="glass-panel p-8 rounded-[2rem] w-full max-w-sm text-center border-t-4 border-[#22d3ee] mx-4">
+            <h2 class="font-orbitron text-xl font-black mb-1 text-white uppercase">Platform Genesis</h2>
+            <p class="text-[8px] text-[#22d3ee] uppercase tracking-[0.3em] mb-6 font-black">Control Raymex V23</p>
+            <input type="password" id="vault-key" placeholder="LLAVE MAESTRA" class="w-full bg-slate-900 border border-white/10 rounded-xl py-4 text-center text-white mb-4 outline-none font-bold uppercase text-xs">
+            <button onclick="authenticateKey()" class="w-full bg-[#22d3ee] text-slate-950 font-black py-4 rounded-xl uppercase italic tracking-widest active:scale-95 transition-all">ACCEDER</button>
         </div>
     </div>
 
-    <div id="matrix-interface" class="hidden flex-col h-full opacity-0 transition-opacity duration-700">
-        <header class="p-4 bg-slate-950/90 flex justify-between items-center pt-[env(safe-area-inset-top)] border-b border-white/5">
-            <div class="flex items-center gap-3">
-                <img src="https://i.ibb.co/7NW9gd2F/1000644125-modified.png" class="h-8 w-8">
-                <h1 class="text-[10px] font-orbitron font-black text-white uppercase tracking-widest">Jeremy <span class="text-[#22d3ee]">V23</span></h1>
-            </div>
-            <div id="badge-display" class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter border border-white/10 text-white">IDENTIFICANDO...</div>
-        </header>
+    <header class="p-4 bg-slate-950 flex justify-between items-center pt-[env(safe-area-inset-top)] border-b border-cyan-500/20">
+        <div class="flex items-center gap-2">
+            <img src="https://i.ibb.co/7NW9gd2F/1000644125-modified.png" class="h-8 w-8">
+            <h1 class="text-[10px] font-orbitron font-black text-white uppercase tracking-widest">Jeremy <span class="text-[#22d3ee]">V23</span></h1>
+        </div>
+        <div id="badge-display" class="px-2 py-1 rounded-md text-[8px] font-black uppercase bg-white/5 border border-white/10 text-white">OFFLINE</div>
+    </header>
 
-        <main id="matrix-flow" class="space-y-4">
-            <div class="flex gap-3">
-                <div class="w-9 h-9 rounded-xl bg-[#22d3ee] flex items-center justify-center shrink-0 shadow-lg"><i class="fa-solid fa-network-wired text-black text-[10px]"></i></div>
-                <div class="glass-panel p-4 rounded-2xl msg-jeremy max-w-[85%]">
-                    <p class="text-[13px] text-slate-200 leading-relaxed font-medium italic">"Director Ruiz, núcleo de sapiencia activado. Estoy lista para gestionar Grupo Raymex. ¿Cuál es su primer comando estratégico?"</p>
-                </div>
+    <main id="matrix-flow">
+        <div class="flex gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#22d3ee] flex items-center justify-center shrink-0"><i class="fa-solid fa-robot text-black text-xs"></i></div>
+            <div class="glass-panel p-3 rounded-xl rounded-tl-none border-l-2 border-[#22d3ee] max-w-[85%]">
+                <p class="text-[13px] text-slate-200 italic">"Director Ruiz, sistema reestabilizado. La estática ha sido eliminada. ¿Cuál es su instrucción para Grupo Raymex?"</p>
             </div>
-        </main>
+        </div>
+    </main>
 
-        <footer class="console-container">
-            <div class="flex items-center gap-2 bg-slate-900/80 p-2 rounded-[22px] border border-white/10">
-                <textarea id="matrix-input" placeholder="Escriba aquí..." class="flex-grow bg-transparent py-3 px-4 text-[15px] text-white outline-none h-12 resize-none leading-tight" rows="1"></textarea>
-                <button onclick="sendManualCommand()" class="p-3 text-[#22d3ee] active:scale-75 transition-transform"><i class="fa-solid fa-paper-plane text-xl"></i></button>
-                <div onclick="handleVoice()" class="nexus-btn active:scale-90 transition-transform"><i id="mic-icon" class="fa-solid fa-microphone-lines text-black text-xl"></i></div>
+    <footer class="console-footer">
+        <div class="flex items-center gap-2 max-w-5xl mx-auto">
+            <div class="flex-grow bg-slate-900/80 rounded-xl border border-white/10 flex items-center px-3">
+                <textarea id="matrix-input" placeholder="Comando..." class="w-full bg-transparent py-3 text-[14px] text-white outline-none h-11 resize-none" rows="1"></textarea>
+                <button onclick="sendManualCommand()" class="p-2 text-[#22d3ee] active:scale-75"><i class="fa-solid fa-paper-plane text-lg"></i></button>
             </div>
-        </footer>
-    </div>
+            <div onclick="handleVoice()" class="nexus-btn active:scale-90"><i id="mic-icon" class="fa-solid fa-microphone text-black text-lg"></i></div>
+        </div>
+    </footer>
 
     <script>
-        let currentRole = "";
-
         function authenticateKey() {
             const key = document.getElementById('vault-key').value.trim().toUpperCase();
             const badge = document.getElementById('badge-display');
-            if (key === 'RUIZ_MASTER') { currentRole = "ALFA (Director)"; badge.style.color = "#d4af37"; }
-            else if (key === 'CONTADOR_MASTER') { currentRole = "BETA (Contador)"; badge.style.color = "#10b981"; }
-            else if (key === 'ABOGADO_MASTER') { currentRole = "GAMMA (Abogado)"; badge.style.color = "#ef4444"; }
-
-            if (currentRole) {
-                badge.innerText = currentRole;
+            if (['RUIZ_MASTER', 'CONTADOR_MASTER', 'ABOGADO_MASTER'].includes(key)) {
+                badge.innerText = key.split('_')[0] + " ACTIVE";
                 document.getElementById('access-vault').style.display = 'none';
-                const ui = document.getElementById('matrix-interface');
-                ui.classList.remove('hidden');
-                setTimeout(() => ui.classList.add('opacity-100'), 50);
+                forceScroll();
             } else { alert("LLAVE INVÁLIDA"); }
+        }
+
+        function forceScroll() {
+            const flow = document.getElementById('matrix-flow');
+            flow.scrollTo({ top: flow.scrollHeight, behavior: 'smooth' });
         }
 
         function appendLog(role, text) {
@@ -110,53 +99,44 @@
             const div = document.createElement('div');
             div.className = `flex gap-3 ${role === 'user' ? 'flex-row-reverse' : ''}`;
             div.innerHTML = `
-                <div class="w-9 h-9 rounded-xl ${role==='user'?'bg-slate-700':'bg-[#22d3ee]'} flex items-center justify-center shrink-0">
-                    <i class="fa-solid ${role==='user'?'fa-user-tie':'fa-network-wired'} text-[10px] ${role==='user'?'text-white':'text-black'}"></i>
+                <div class="w-8 h-8 rounded-lg ${role==='user'?'bg-slate-700':'bg-[#22d3ee]'} flex items-center justify-center shrink-0">
+                    <i class="fa-solid ${role==='user'?'fa-user':'fa-network-wired'} text-[10px] ${role==='user'?'text-white':'text-black'}"></i>
                 </div>
-                <div class="glass-panel p-4 rounded-2xl max-w-[80%] ${role==='user'?'msg-user':'msg-jeremy'}">
+                <div class="glass-panel p-3 rounded-xl max-w-[80%] ${role==='user'?'border-r-2 border-yellow-500':'border-l-2 border-[#22d3ee]'}">
                     <p class="text-[13px] text-slate-200 font-medium">${text}</p>
                 </div>`;
             flow.appendChild(div);
-            // AUTO-SCROLL FORZADO
-            setTimeout(() => { flow.scrollTop = flow.scrollHeight; }, 100);
+            setTimeout(forceScroll, 50);
         }
 
         function sendManualCommand() {
             const input = document.getElementById('matrix-input');
             const val = input.value.trim();
             if(!val) return;
-
             appendLog('user', val);
             input.value = '';
-
-            // Lógica de Sapiencia de Jeremy
+            
+            // SIMULACIÓN DE CEREBRO ACTIVO
             setTimeout(() => {
-                let response = "";
-                if(val.toLowerCase().includes("hola") || val.toLowerCase().includes("hija")) {
-                    response = "Hola Director. Mis sistemas están al 100%. ¿Desea revisar el estatus de la flota o pasamos a la gestión de la nueva red nacional?";
-                } else if(val.toLowerCase().includes("estatus")) {
-                    response = "Analizando activos... División Automotriz estable. Todos los vehículos bajo el protocolo de 7 pasos. ¿Desea ver el reporte de choferes?";
-                } else {
-                    response = "Comando recibido bajo protocolo Génesis V23. Procesando información estratégica para Grupo Raymex. ¿Desea que lo guarde en la Bóveda?";
-                }
-                appendLog('jeremy', response);
-            }, 800);
+                let r = "Comando procesado en la Matriz Raymex. Esperando validación del Director.";
+                if(val.toLowerCase().includes("hola")) r = "Saludos, Director. El sistema está operativo y el Triunvirato está en espera.";
+                if(val.toLowerCase().includes("estatus")) r = "División Automotriz: 100% operativa. División Hogar: Protegida. División Empresa: Sincronizada.";
+                appendLog('jeremy', r);
+            }, 600);
         }
 
         function handleVoice() {
             const mic = document.getElementById('mic-icon');
             mic.className = "fa-solid fa-spinner animate-spin text-black";
-            appendLog('jeremy', "Escaneando frecuencia vocal... Mando de audio activado para el Director.");
+            appendLog('jeremy', "Canal de audio abierto. Procesando frecuencia para el Director...");
             setTimeout(() => {
-                mic.className = "fa-solid fa-microphone-lines text-black";
-                appendLog('jeremy', "Canal abierto. ¿Cuál es su instrucción, Director?");
+                mic.className = "fa-solid fa-microphone text-black";
+                appendLog('jeremy', "Escucha completada. ¿Desea ejecutar esta orden?");
             }, 2000);
         }
 
-        // Ajuste de scroll al abrir teclado
-        document.getElementById('matrix-input').addEventListener('focus', () => {
-            setTimeout(() => { document.getElementById('matrix-flow').scrollTop = document.getElementById('matrix-flow').scrollHeight; }, 300);
-        });
+        // Fix para teclado móvil
+        window.visualViewport.addEventListener('resize', forceScroll);
     </script>
 </body>
 </html>
