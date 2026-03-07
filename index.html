@@ -10,9 +10,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Urbanist', sans-serif; background-color: #020617; color: #f8fafc; margin: 0; overflow-x: hidden; }
+        body { font-family: 'Urbanist', sans-serif; background-color: #020617; color: #f8fafc; margin: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         .glass-card { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; }
         .gold-text { color: #d4af37; }
+        
+        /* BLINDAJE CONTRA COPIADO DE IMAGEN */
+        img { 
+            -webkit-touch-callout: none; /* Desactiva el menú de copiar/guardar en iOS/Android */
+            -webkit-user-select: none; 
+            user-select: none;
+            pointer-events: auto;
+        }
+
         .view { display: none; opacity: 0; }
         .view.active { display: block; opacity: 1; animation: fadeIn 0.3s ease-out; }
         #login-gate { position: fixed; inset: 0; z-index: 999; background: #020617; display: flex; align-items: center; justify-content: center; padding: 20px; }
@@ -34,9 +43,15 @@
 
     <nav class="fixed top-0 w-full z-50 bg-[#020617]/90 border-b border-white/5 h-20 flex items-center">
         <div class="flex items-center justify-between w-full max-w-5xl mx-auto px-4">
-            <div class="flex items-center gap-3" onmousedown="startReset()" onmouseup="stopReset()" ontouchstart="startReset()" ontouchend="stopReset()">
-                <img src="https://i.ibb.co/zV60f1gm/1000644130-modified.png" class="h-10 w-10 object-contain">
-                <div><h1 class="text-white text-sm font-black uppercase italic leading-none">Raymex</h1><p class="text-[7px] gold-text uppercase font-bold tracking-widest">Soberano</p></div>
+            <div class="flex items-center gap-3 select-none" 
+                 oncontextmenu="return false;" 
+                 onmousedown="startReset()" onmouseup="stopReset()" 
+                 ontouchstart="startReset()" ontouchend="stopReset()">
+                <img src="https://i.ibb.co/zV60f1gm/1000644130-modified.png" class="h-10 w-10 object-contain pointer-events-none">
+                <div>
+                    <h1 class="text-white text-sm font-black uppercase italic leading-none">Raymex</h1>
+                    <p class="text-[7px] gold-text uppercase font-bold tracking-widest">Soberano</p>
+                </div>
             </div>
             <div class="flex gap-2">
                 <button onclick="changeView('home')" id="btn-home" class="nav-btn active">Inicio</button>
@@ -52,20 +67,44 @@
         <div class="w-12 h-1 bg-gold mx-auto mb-6"></div>
         <p class="text-slate-400 italic">"Garantizando la soberanía del código y la integridad del patrimonio."</p>
     </main>
-    <main id="auto" class="view pt-28 px-6"><h2 class="text-2xl font-black gold-text mb-4 uppercase">Automotriz</h2><div class="glass-card p-6 border-l-4 border-lime-400"><p class="text-white font-bold italic">Auditoría de Flota</p></div></main>
-    <main id="hogar" class="view pt-28 px-6"><h2 class="text-2xl font-black gold-text mb-4 uppercase">Hogar</h2><div class="glass-card p-6 border-l-4 border-emerald-500"><p class="text-white font-bold italic">Gestión Patrimonial</p></div></main>
-    <main id="empresa" class="view pt-28 px-6"><h2 class="text-2xl font-black gold-text mb-4 uppercase">Empresa</h2><div class="glass-card p-6 border-l-4 border-sky-500"><p class="text-white font-bold italic">Estructura Corporativa</p></div></main>
+
+    <main id="auto" class="view pt-28 px-6">
+        <h2 class="text-2xl font-black gold-text mb-4 uppercase italic">División Automotriz</h2>
+        <div class="glass-card p-6 border-l-4 border-lime-400">
+            <p class="text-white font-bold italic">Auditoría de Flota</p>
+            <p class="text-xs text-slate-400">Control de activos vehiculares Grupo Raymex.</p>
+        </div>
+    </main>
+
+    <main id="hogar" class="view pt-28 px-6">
+        <h2 class="text-2xl font-black gold-text mb-4 uppercase italic">División Hogar</h2>
+        <div class="glass-card p-6 border-l-4 border-emerald-500">
+            <p class="text-white font-bold italic">Gestión Patrimonial</p>
+        </div>
+    </main>
+
+    <main id="empresa" class="view pt-28 px-6">
+        <h2 class="text-2xl font-black gold-text mb-4 uppercase italic">División Empresa</h2>
+        <div class="glass-card p-6 border-l-4 border-sky-500">
+            <p class="text-white font-bold italic">Estructura Corporativa</p>
+        </div>
+    </main>
 
     <script>
         const MASTER_KEYS = ['RUIZ_MASTER', 'ABOGADO_MASTER', 'CONTADOR_MASTER', 'HIJA_CONTROL', 'ROBERTO_SENTINEL'];
+        
         function checkKey() {
             const key = document.getElementById('master-key').value.trim().toUpperCase();
             if (MASTER_KEYS.includes(key)) {
                 document.getElementById('login-gate').style.display = 'none';
                 localStorage.setItem('raymex_auth', 'active');
-            } else { alert('ACCESO DENEGADO: LLAVE INVÁLIDA'); }
+            } else { alert('ACCESO DENEGADO'); }
         }
-        if (localStorage.getItem('raymex_auth') === 'active') { document.getElementById('login-gate').style.display = 'none'; }
+
+        if (localStorage.getItem('raymex_auth') === 'active') { 
+            document.getElementById('login-gate').style.display = 'none'; 
+        }
+
         function changeView(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -73,10 +112,17 @@
             document.getElementById('btn-' + id).classList.add('active');
             window.scrollTo(0,0);
         }
+
         let timer;
-        function startReset() { timer = setTimeout(() => { if(confirm("¿Cerrar sesión de seguridad?")){localStorage.removeItem('raymex_auth'); location.reload();} }, 3000); }
+        function startReset() { 
+            timer = setTimeout(() => { 
+                if(confirm("SEGURIDAD: ¿Cerrar sesión y cambiar de llave?")) {
+                    localStorage.removeItem('raymex_auth'); 
+                    location.reload();
+                }
+            }, 3000); 
+        }
         function stopReset() { clearTimeout(timer); }
     </script>
 </body>
-            </html>
-            
+</html>
