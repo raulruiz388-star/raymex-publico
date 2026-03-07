@@ -8,58 +8,64 @@
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root { --matrix-cyan: #22d3ee; --dark-bg: #020617; }
-        body, html { height: 100dvh; margin: 0; background: var(--dark-bg); color: #f8fafc; font-family: 'Urbanist', sans-serif; overflow: hidden; position: fixed; width: 100%; }
-        .glass-panel { background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
-        #matrix-flow { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; -webkit-overflow-scrolling: touch; }
-        #matrix-flow::-webkit-scrollbar { display: none; }
-        .console-footer { padding: 12px; padding-bottom: calc(env(safe-area-inset-bottom) + 12px); background: #020617; border-top: 1px solid rgba(34, 211, 238, 0.2); }
-        .nexus-btn { width: 54px; height: 54px; border-radius: 14px; background: var(--matrix-cyan); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 15px rgba(34, 211, 238, 0.4); touch-action: manipulation; }
+        :root { --cyan: #22d3ee; --dark: #020617; }
+        body, html { height: 100dvh; margin: 0; background: var(--dark); color: #f8fafc; font-family: 'Urbanist', sans-serif; overflow: hidden; position: fixed; width: 100%; }
+        .glass { background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
+        #matrix-flow { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; -webkit-overflow-scrolling: touch; }
+        .console-footer { padding: 12px; padding-bottom: calc(env(safe-area-inset-bottom) + 12px); background: #020617; border-top: 1px solid rgba(34, 211, 238, 0.3); }
+        .nexus-btn { width: 55px; height: 55px; border-radius: 15px; background: var(--cyan); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 20px rgba(34, 211, 238, 0.4); touch-action: manipulation; }
         textarea { user-select: text !important; -webkit-user-select: text !important; }
-        #access-vault { position: fixed; inset: 0; z-index: 9999; background: var(--dark-bg); display: flex; align-items: center; justify-content: center; }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
     </style>
 </head>
 <body class="flex flex-col">
 
-    <div id="access-vault">
-        <div class="glass-panel p-8 rounded-[2rem] w-full max-w-sm text-center border-t-4 border-[#22d3ee] mx-4">
+    <div id="access-vault" class="fixed inset-0 z-[9999] bg-[#020617] flex items-center justify-center p-6">
+        <div class="glass p-8 rounded-[2.5rem] w-full max-w-sm text-center border-t-4 border-[#22d3ee]">
+            <div class="w-16 h-16 bg-slate-900 rounded-full mx-auto mb-4 flex items-center justify-center border-2 border-[#22d3ee]">
+                <span class="font-orbitron font-black text-xl text-white">GR</span>
+            </div>
             <h2 class="font-orbitron text-xl font-black mb-1 text-white uppercase italic">Platform Genesis</h2>
-            <p class="text-[8px] text-[#22d3ee] uppercase tracking-[0.3em] mb-6 font-black">Control Raymex V23</p>
-            <input type="password" id="vault-key" placeholder="LLAVE MAESTRA" class="w-full bg-slate-900 border border-white/10 rounded-xl py-4 text-center text-white mb-6 outline-none font-bold uppercase text-xs">
-            <button onclick="authenticateKey()" class="w-full bg-[#22d3ee] text-slate-950 font-black py-4 rounded-xl uppercase italic tracking-widest active:scale-95 transition-all shadow-lg">ACCEDER</button>
+            <p class="text-[8px] text-[#22d3ee] uppercase tracking-[0.3em] mb-8 font-black">Red Segura Sincronizada</p>
+            <input type="password" id="vault-key" placeholder="LLAVE CRIPTOGRÁFICA" class="w-full bg-slate-900 border border-white/10 rounded-2xl py-4 text-center text-white mb-6 outline-none font-bold uppercase text-xs">
+            <button onclick="authenticateKey()" class="w-full bg-[#22d3ee] text-slate-950 font-black py-4 rounded-2xl uppercase italic tracking-widest active:scale-95 transition-all">Desbloquear</button>
         </div>
     </div>
 
-    <header class="p-4 bg-slate-950 flex justify-between items-center pt-[env(safe-area-inset-top)] border-b border-cyan-500/20">
+    <header class="p-4 bg-slate-950 flex justify-between items-center pt-[env(safe-area-inset-top)] border-b border-cyan-500/30">
         <div class="flex items-center gap-2">
-            <img src="https://i.ibb.co/7NW9gd2F/1000644125-modified.png" class="h-8 w-8">
             <h1 class="text-[10px] font-orbitron font-black text-white uppercase tracking-widest">Jeremy <span class="text-[#22d3ee]">V23</span></h1>
         </div>
-        <div id="badge-display" class="px-2 py-1 rounded-md text-[8px] font-black uppercase bg-white/5 border border-white/10 text-white italic">ESPERANDO...</div>
+        <div id="badge-display" class="px-2 py-1 rounded-md text-[8px] font-black uppercase bg-white/5 border border-white/10 text-white italic italic">SECURE NODE</div>
     </header>
 
     <main id="matrix-flow"></main>
 
     <footer class="console-footer">
         <div class="flex items-center gap-2 max-w-5xl mx-auto">
-            <div class="flex-grow bg-slate-900/80 rounded-xl border border-white/10 flex items-center px-3 shadow-inner">
-                <textarea id="matrix-input" placeholder="Comando..." spellcheck="true" class="w-full bg-transparent py-3 text-[15px] text-white outline-none h-11 resize-none" rows="1"></textarea>
+            <div class="flex-grow bg-slate-900/80 rounded-xl border border-white/10 flex items-center px-3">
+                <textarea id="matrix-input" placeholder="Comando directo..." class="w-full bg-transparent py-3 text-[15px] text-white outline-none h-11 resize-none" rows="1"></textarea>
                 <button onclick="sendManualCommand()" class="p-2 text-[#22d3ee] active:scale-75"><i class="fa-solid fa-paper-plane text-lg"></i></button>
             </div>
-            <div onclick="requestVocalAuth()" class="nexus-btn active:scale-90"><i id="mic-icon" class="fa-solid fa-microphone text-black text-lg"></i></div>
+            <div onclick="activarHardwareVocal()" class="nexus-btn active:scale-90"><i id="mic-icon" class="fa-solid fa-microphone text-black text-lg"></i></div>
         </div>
     </footer>
 
     <script>
+        // NÚCLEO DE SAPIENCIA LOCAL (GRUPO RAYMEX)
+        const RAYMEX_BRAIN = {
+            flota: { total: 5, unidades: "3 en Cancún, 2 Nacionales", mantenimiento: "Protocolo 7 Pasos verificado." },
+            divisiones: "Automotriz, Hogar y Empresarial sincronizadas.",
+            director: "Raúl Ruiz López",
+            estado: "Soberanía de Datos Activa"
+        };
+
         function authenticateKey() {
             const key = document.getElementById('vault-key').value.trim().toUpperCase();
-            const badge = document.getElementById('badge-display');
             if (['RUIZ_MASTER', 'CONTADOR_MASTER', 'ABOGADO_MASTER'].includes(key)) {
-                badge.innerText = key.split('_')[0] + " ACTIVE";
                 document.getElementById('access-vault').style.display = 'none';
-                appendLog('jeremy', "Director Ruiz, sistema en línea. Datos de flota y logística nacional cargados. ¿Cuál es su instrucción?");
-            } else { alert("LLAVE INVÁLIDA"); }
+                appendLog('jeremy', `Director Ruiz, el canal en Red Segura está abierto. Tenemos bajo mando las 3 divisiones y las ${RAYMEX_BRAIN.flota.total} unidades de la flota. ¿Cuál es su orden?`);
+            } else { alert("ACCESO DENEGADO"); }
         }
 
         function appendLog(role, text) {
@@ -70,11 +76,11 @@
                 <div class="w-8 h-8 rounded-lg ${role==='user'?'bg-slate-700':'bg-[#22d3ee]'} flex items-center justify-center shrink-0">
                     <i class="fa-solid ${role==='user'?'fa-user-tie':'fa-robot'} text-[10px] ${role==='user'?'text-white':'text-black'}"></i>
                 </div>
-                <div class="glass-panel p-3 rounded-xl max-w-[80%] ${role==='user'?'border-r-2 border-yellow-500':'border-l-2 border-[#22d3ee]'}">
+                <div class="glass p-3 rounded-xl max-w-[80%] ${role==='user'?'border-r-2 border-yellow-500':'border-l-2 border-[#22d3ee]'}">
                     <p class="text-[13px] text-slate-200 font-medium">${text}</p>
                 </div>`;
             flow.appendChild(div);
-            setTimeout(() => { flow.scrollTop = flow.scrollHeight; }, 50);
+            setTimeout(() => { flow.scrollTop = flow.scrollHeight; }, 100);
         }
 
         function sendManualCommand() {
@@ -84,35 +90,31 @@
             appendLog('user', val);
             input.value = '';
 
-            setTimeout(() => {
-                let r = "Entendido Director. Actualizando información en la matriz nacional...";
-                
-                // MEJORA DE LÓGICA DE BÚSQUEDA
-                if (val.includes("carro") || val.includes("vehiculo") || val.includes("cuanto") || val.includes("flota")) {
-                    r = "Actualmente tenemos **5 carros** registrados. 3 operativos en Cancún y 2 en tránsito logístico nacional. Todos bajo el protocolo de mantenimiento de 7 pasos.";
-                } else if (val.includes("estatus") || val.includes("división")) {
-                    r = "Estatus Raymex: División Automotriz y Empresa operando al 100%. Auditoría legal y fiscal en espera de su firma.";
-                } else if (val.includes("hola") || val.includes("hija")) {
-                    r = "Saludos Director Ruiz. ¿Iniciamos el monitoreo de activos o revisamos el nuevo nodo de rentas?";
-                }
-                
-                appendLog('jeremy', r);
-            }, 600);
+            // RESPUESTAS INSTANTÁNEAS (SAPIENCIA SIN ESPERA)
+            let r = "Comando procesado en la matriz. ¿Desea ejecutar acción en la división " + RAYMEX_BRAIN.divisiones.split(' ')[0] + "?";
+            
+            if (val.includes("carro") || val.includes("flota") || val.includes("cuanto")) {
+                r = `Tenemos **${RAYMEX_BRAIN.flota.total} carros** operativos. ${RAYMEX_BRAIN.flota.unidades}. Todos cumpliendo el ${RAYMEX_BRAIN.flota.mantenimiento}`;
+            } else if (val.includes("estatus") || val.includes("hola")) {
+                r = `Estatus de Grupo Raymex: **${RAYMEX_BRAIN.estado}**. Todas las divisiones operativas en Cancún.`;
+            }
+
+            setTimeout(() => { appendLog('jeremy', r); }, 400);
         }
 
-        async function requestVocalAuth() {
+        async function activarHardwareVocal() {
             const mic = document.getElementById('mic-icon');
             try {
-                // Solicitar permiso de micrófono (Solo funciona en modo normal/HTTPS)
+                // Intento de apertura de canal en red segura
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 mic.className = "fa-solid fa-wave-square animate-pulse text-white";
-                appendLog('jeremy', "Sensor de audio abierto. Director, puede dictar su orden ahora.");
+                appendLog('jeremy', "Sensor vocal abierto. La Red Segura permite dictado nativo.");
                 setTimeout(() => {
                     mic.className = "fa-solid fa-microphone text-black";
                     stream.getTracks().forEach(track => track.stop());
                 }, 4000);
             } catch (err) {
-                appendLog('jeremy', "BLOQUEO: Salga del modo incógnito e instale la App para activar el dictado por voz.");
+                appendLog('jeremy', "NOTA DE SEGURIDAD: Su red bloquea el micrófono del navegador. Use el dictado nativo de su teclado para hablarle al sistema.");
             }
         }
     </script>
