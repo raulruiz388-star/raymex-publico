@@ -9,33 +9,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root { --matrix-cyan: #22d3ee; --dark-bg: #020617; }
-        body, html { 
-            height: 100%; height: 100svh; margin: 0; padding: 0;
-            background: var(--dark-bg); color: #f8fafc;
-            font-family: 'Urbanist', sans-serif; overflow: hidden;
-        }
+        body, html { height: 100dvh; margin: 0; background: var(--dark-bg); color: #f8fafc; font-family: 'Urbanist', sans-serif; overflow: hidden; position: fixed; width: 100%; }
         .glass-panel { background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
-        
-        #matrix-flow { 
-            flex: 1; overflow-y: scroll; padding: 20px;
-            display: flex; flex-direction: column; gap: 16px;
-            -webkit-overflow-scrolling: touch;
-        }
+        #matrix-flow { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; -webkit-overflow-scrolling: touch; }
         #matrix-flow::-webkit-scrollbar { display: none; }
-
-        .console-footer {
-            padding: 12px;
-            padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
-            background: #020617; border-top: 1px solid rgba(22, 234, 234, 0.2);
-        }
-
-        .nexus-btn { 
-            width: 54px; height: 54px; border-radius: 14px; 
-            background: var(--matrix-cyan); display: flex; 
-            align-items: center; justify-content: center; 
-            flex-shrink: 0; box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
-        }
-
+        .console-footer { padding: 12px; padding-bottom: calc(env(safe-area-inset-bottom) + 12px); background: #020617; border-top: 1px solid rgba(34, 211, 238, 0.2); }
+        .nexus-btn { width: 54px; height: 54px; border-radius: 14px; background: var(--matrix-cyan); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 15px rgba(34, 211, 238, 0.4); touch-action: manipulation; }
+        textarea { user-select: text !important; -webkit-user-select: text !important; }
         #access-vault { position: fixed; inset: 0; z-index: 9999; background: var(--dark-bg); display: flex; align-items: center; justify-content: center; }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
     </style>
@@ -44,9 +24,9 @@
 
     <div id="access-vault">
         <div class="glass-panel p-8 rounded-[2rem] w-full max-w-sm text-center border-t-4 border-[#22d3ee] mx-4">
-            <h2 class="font-orbitron text-xl font-black mb-1 text-white uppercase">Platform Genesis</h2>
+            <h2 class="font-orbitron text-xl font-black mb-1 text-white uppercase italic">Platform Genesis</h2>
             <p class="text-[8px] text-[#22d3ee] uppercase tracking-[0.3em] mb-6 font-black">Control Raymex V23</p>
-            <input type="password" id="vault-key" placeholder="LLAVE MAESTRA" class="w-full bg-slate-900 border border-white/10 rounded-xl py-4 text-center text-white mb-4 outline-none font-bold uppercase text-xs">
+            <input type="password" id="vault-key" placeholder="LLAVE MAESTRA" class="w-full bg-slate-900 border border-white/10 rounded-xl py-4 text-center text-white mb-6 outline-none font-bold uppercase text-xs">
             <button onclick="authenticateKey()" class="w-full bg-[#22d3ee] text-slate-950 font-black py-4 rounded-xl uppercase italic tracking-widest active:scale-95 transition-all">ACCEDER</button>
         </div>
     </div>
@@ -56,42 +36,36 @@
             <img src="https://i.ibb.co/7NW9gd2F/1000644125-modified.png" class="h-8 w-8">
             <h1 class="text-[10px] font-orbitron font-black text-white uppercase tracking-widest">Jeremy <span class="text-[#22d3ee]">V23</span></h1>
         </div>
-        <div id="badge-display" class="px-2 py-1 rounded-md text-[8px] font-black uppercase bg-white/5 border border-white/10 text-white">OFFLINE</div>
+        <div id="badge-display" class="px-2 py-1 rounded-md text-[8px] font-black uppercase bg-white/5 border border-white/10 text-white italic">ONLINE</div>
     </header>
 
-    <main id="matrix-flow">
-        <div class="flex gap-3">
-            <div class="w-8 h-8 rounded-lg bg-[#22d3ee] flex items-center justify-center shrink-0"><i class="fa-solid fa-robot text-black text-xs"></i></div>
-            <div class="glass-panel p-3 rounded-xl rounded-tl-none border-l-2 border-[#22d3ee] max-w-[85%]">
-                <p class="text-[13px] text-slate-200 italic">"Director Ruiz, sistema reestabilizado. La estática ha sido eliminada. ¿Cuál es su instrucción para Grupo Raymex?"</p>
-            </div>
-        </div>
-    </main>
+    <main id="matrix-flow"></main>
 
     <footer class="console-footer">
         <div class="flex items-center gap-2 max-w-5xl mx-auto">
             <div class="flex-grow bg-slate-900/80 rounded-xl border border-white/10 flex items-center px-3">
-                <textarea id="matrix-input" placeholder="Comando..." class="w-full bg-transparent py-3 text-[14px] text-white outline-none h-11 resize-none" rows="1"></textarea>
+                <textarea id="matrix-input" placeholder="Comando estratégico..." spellcheck="true" class="w-full bg-transparent py-3 text-[15px] text-white outline-none h-11 resize-none" rows="1"></textarea>
                 <button onclick="sendManualCommand()" class="p-2 text-[#22d3ee] active:scale-75"><i class="fa-solid fa-paper-plane text-lg"></i></button>
             </div>
-            <div onclick="handleVoice()" class="nexus-btn active:scale-90"><i id="mic-icon" class="fa-solid fa-microphone text-black text-lg"></i></div>
+            <div onclick="requestVocalAuth()" class="nexus-btn active:scale-90"><i id="mic-icon" class="fa-solid fa-microphone text-black text-lg"></i></div>
         </div>
     </footer>
 
     <script>
+        // NÚCLEO DE CONOCIMIENTO DE GRUPO RAYMEX
+        const RAYMEX_DATA = {
+            flota: { total: 5, estatus: "Protocolo 7 pasos activo", detalle: "3 Unidades en Cancún, 2 en logística nacional." },
+            divisiones: ["Automotriz", "Hogar", "Empresa"],
+            director: "Raúl Ruiz López",
+            ubicacion: "Cancún, Quintana Roo"
+        };
+
         function authenticateKey() {
             const key = document.getElementById('vault-key').value.trim().toUpperCase();
-            const badge = document.getElementById('badge-display');
             if (['RUIZ_MASTER', 'CONTADOR_MASTER', 'ABOGADO_MASTER'].includes(key)) {
-                badge.innerText = key.split('_')[0] + " ACTIVE";
                 document.getElementById('access-vault').style.display = 'none';
-                forceScroll();
+                appendLog('jeremy', `Director Ruiz, plataforma V23 lista. He cargado la base de datos de Grupo Raymex. ¿Desea revisar los ${RAYMEX_DATA.flota.total} carros o el estatus legal?`);
             } else { alert("LLAVE INVÁLIDA"); }
-        }
-
-        function forceScroll() {
-            const flow = document.getElementById('matrix-flow');
-            flow.scrollTo({ top: flow.scrollHeight, behavior: 'smooth' });
         }
 
         function appendLog(role, text) {
@@ -100,43 +74,52 @@
             div.className = `flex gap-3 ${role === 'user' ? 'flex-row-reverse' : ''}`;
             div.innerHTML = `
                 <div class="w-8 h-8 rounded-lg ${role==='user'?'bg-slate-700':'bg-[#22d3ee]'} flex items-center justify-center shrink-0">
-                    <i class="fa-solid ${role==='user'?'fa-user':'fa-network-wired'} text-[10px] ${role==='user'?'text-white':'text-black'}"></i>
+                    <i class="fa-solid ${role==='user'?'fa-user-tie':'fa-robot'} text-[10px] ${role==='user'?'text-white':'text-black'}"></i>
                 </div>
                 <div class="glass-panel p-3 rounded-xl max-w-[80%] ${role==='user'?'border-r-2 border-yellow-500':'border-l-2 border-[#22d3ee]'}">
                     <p class="text-[13px] text-slate-200 font-medium">${text}</p>
                 </div>`;
             flow.appendChild(div);
-            setTimeout(forceScroll, 50);
+            setTimeout(() => { flow.scrollTop = flow.scrollHeight; }, 100);
         }
 
         function sendManualCommand() {
             const input = document.getElementById('matrix-input');
-            const val = input.value.trim();
+            const val = input.value.trim().toLowerCase();
             if(!val) return;
             appendLog('user', val);
             input.value = '';
-            
-            // SIMULACIÓN DE CEREBRO ACTIVO
+
+            // LÓGICA DE RESPUESTA SAPIENS
             setTimeout(() => {
-                let r = "Comando procesado en la Matriz Raymex. Esperando validación del Director.";
-                if(val.toLowerCase().includes("hola")) r = "Saludos, Director. El sistema está operativo y el Triunvirato está en espera.";
-                if(val.toLowerCase().includes("estatus")) r = "División Automotriz: 100% operativa. División Hogar: Protegida. División Empresa: Sincronizada.";
+                let r = "Entendido Director. Procesando datos de la matriz nacional...";
+                
+                if (val.includes("carro") || val.includes("vehiculo") || val.includes("cuanto")) {
+                    r = `Actualmente tenemos **${RAYMEX_DATA.flota.total} carros** registrados en el sistema. Todos están bajo el ${RAYMEX_DATA.flota.estatus}. ${RAYMEX_DATA.flota.detalle}`;
+                } else if (val.includes("estatus") || val.includes("división")) {
+                    r = `Estatus de Grupo Raymex: **Automotriz** (Auditada), **Hogar** (Patrimonio seguro), **Empresa** (Operativa).`;
+                } else if (val.includes("hola") || val.includes("hija")) {
+                    r = "Saludos Director. ¿Iniciamos auditoría de mantenimiento o revisamos la logística nacional?";
+                }
+                
                 appendLog('jeremy', r);
-            }, 600);
+            }, 500);
         }
 
-        function handleVoice() {
+        async function requestVocalAuth() {
             const mic = document.getElementById('mic-icon');
-            mic.className = "fa-solid fa-spinner animate-spin text-black";
-            appendLog('jeremy', "Canal de audio abierto. Procesando frecuencia para el Director...");
-            setTimeout(() => {
-                mic.className = "fa-solid fa-microphone text-black";
-                appendLog('jeremy', "Escucha completada. ¿Desea ejecutar esta orden?");
-            }, 2000);
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mic.className = "fa-solid fa-wave-square animate-pulse text-white";
+                appendLog('jeremy', "Sensor de audio abierto. Director, puede dictar al teclado o dar la orden.");
+                setTimeout(() => {
+                    mic.className = "fa-solid fa-microphone text-black";
+                    stream.getTracks().forEach(track => track.stop());
+                }, 4000);
+            } catch (err) {
+                appendLog('jeremy', "ERROR DE SENSOR: Por favor, habilite el micrófono en los ajustes de su navegador.");
+            }
         }
-
-        // Fix para teclado móvil
-        window.visualViewport.addEventListener('resize', forceScroll);
     </script>
 </body>
 </html>
