@@ -1,0 +1,16 @@
+{
+  "name": "Raymex Genesis",
+  "short_name": "Raymex",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#d4af37",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/7NW9gd2F/1000644125-modified.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
