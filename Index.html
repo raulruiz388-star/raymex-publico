@@ -2,307 +2,50 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>RAYMEX | Gestión de Activos</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Raymex | Central de Activos</title>
     
-    <style>
-        :root { 
-            --bg-dark: #050b14; 
-            --bg-card: #0a1120;
-            --raymex-gold: #c5a059; 
-            --neon-auto: #bef264; 
-            --emerald-hogar: #10b981; 
-            --blue-empresa: #0ea5e9;
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#c5a059">
+
+    <script>
+        // Registrar el motor de la App
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
         }
-        body { font-family: 'Urbanist', sans-serif; background-color: var(--bg-dark); color: white; overflow-x: hidden; scroll-behavior: smooth; }
-        .font-orbitron { font-family: 'Orbitron', sans-serif; }
-        
-        .nav-link { color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 12px; letter-spacing: 2px; transition: 0.3s; }
-        .nav-link:hover { color: white; }
-        .nav-active { color: var(--raymex-gold); border-bottom: 2px solid var(--raymex-gold); padding-bottom: 4px; }
 
-        .division-card { background: var(--bg-card); border-radius: 24px; padding: 40px; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-        .border-auto { border-left: 6px solid var(--neon-auto); }
-        .border-hogar { border-left: 6px solid var(--emerald-hogar); }
-        .border-empresa { border-left: 6px solid var(--blue-empresa); }
+        // Lógica de Acceso SOM V11
+        function entrar() {
+            const llave = document.getElementById('passkey').value.trim().toUpperCase();
+            
+            if (llave === 'RUIZ_MASTER') {
+                alert('BIENVENIDO DIRECTOR. ACCESO TOTAL.');
+                window.location.href = 'https://tu-plataforma-real.com/admin'; 
+            } else if (llave === 'HIJA_CONTROL') {
+                alert('ACCESO SUPERVISORA. MONITOR ACTIVO.');
+                window.location.href = 'https://tu-plataforma-real.com/supervision';
+            } else if (llave === 'ROBERTO_SENTINEL') {
+                alert('CENTINELA ACTIVADO. MONITOR DE INTEGRIDAD.');
+                window.location.href = 'https://tu-plataforma-real.com/sentinel';
+            } else {
+                alert('LLAVE NO RECONOCIDA. RIGOR ABSOLUTO.');
+            }
+        }
+    </script>
 
-        .btn-division { width: 100%; padding: 15px; border-radius: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center; margin-top: 30px; transition: 0.3s; color: #050b14; }
-        .btn-division:active { transform: scale(0.98); }
-
-        .step-item { display: flex; align-items: center; gap: 20px; margin-bottom: 25px; }
-        .step-number { width: 45px; height: 45px; background: var(--raymex-gold); color: black; font-weight: 900; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-size: 18px; flex-shrink: 0; }
-        .step-text { font-style: italic; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; font-size: 14px; }
-
-        /* Portal SOM V11 Modal */
-        #portal-modal { position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .input-clave { background: transparent; border: 1px solid var(--raymex-gold); border-radius: 16px; padding: 20px; color: white; text-align: center; font-size: 18px; letter-spacing: 5px; text-transform: uppercase; width: 100%; max-w: 350px; outline: none; margin-bottom: 20px; font-weight: 700; }
-        .input-clave:focus { box-shadow: 0 0 20px rgba(197, 160, 89, 0.2); }
-
-        /* Chatbot Widget */
-        #chat-widget { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
-        #chat-window { width: 350px; height: 500px; max-height: 80vh; background: var(--bg-card); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; display: none; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.8); overflow: hidden; }
-        #chat-messages { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        #chat-messages::-webkit-scrollbar { display: none; }
-        .msg-bubble { max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 13px; line-height: 1.5; font-weight: 500; }
-        .msg-jeremy { background: rgba(255,255,255,0.05); border-left: 3px solid var(--raymex-gold); align-self: flex-start; border-top-left-radius: 4px; }
-        .msg-user { background: var(--raymex-gold); color: black; align-self: flex-end; border-top-right-radius: 4px; font-weight: 700; }
-        .chat-toggle { width: 65px; height: 65px; background: var(--raymex-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: black; font-size: 28px; cursor: pointer; box-shadow: 0 10px 25px rgba(197, 160, 89, 0.4); transition: 0.3s; }
-        .chat-toggle.pulse { animation: pulse-gold 2s infinite; }
-        @keyframes pulse-gold { 0% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.6); } 70% { box-shadow: 0 0 0 20px rgba(197, 160, 89, 0); } 100% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0); } }
+    <style>
+        body { background: #050b14; color: #c5a059; font-family: sans-serif; text-align: center; padding-top: 50px; }
+        input { padding: 12px; border: 1px solid #c5a059; background: #0a101e; color: white; width: 80%; max-width: 300px; text-align: center; margin-bottom: 20px; border-radius: 5px; }
+        button { padding: 12px 40px; background: #c5a059; color: black; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; text-transform: uppercase; }
+        .logo { width: 150px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
-
-    <nav class="fixed w-full top-0 bg-[#050b14]/90 backdrop-blur-md z-50 border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <!-- BOTÓN DEL PORTAL SOM V11 (LAS 4 PUERTAS) -->
-            <div class="flex items-center gap-3 cursor-pointer" onclick="openPortal()">
-                <div class="w-12 h-12 rounded-full border border-[#c5a059] flex items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900 shadow-lg">
-                    <span class="font-orbitron font-black text-xl text-white">GR</span>
-                </div>
-                <div>
-                    <h1 class="font-orbitron font-black text-lg tracking-widest uppercase leading-none">Raymex</h1>
-                    <p class="text-[9px] text-[#c5a059] font-bold tracking-[0.2em] uppercase mt-1">Gestión de Activos</p>
-                </div>
-            </div>
-            <div class="hidden md:flex gap-8 items-center">
-                <a href="#" class="nav-link nav-active">Inicio</a>
-                <a href="#auto" class="nav-link">Auto</a>
-                <a href="#hogar" class="nav-link">Hogar</a>
-                <a href="#empresa" class="nav-link">Empresa</a>
-            </div>
-        </div>
-    </nav>
-
-    <section class="pt-32 pb-20 px-6 min-h-[90vh] flex flex-col items-center justify-center text-center relative" style="background: linear-gradient(to bottom, rgba(5,11,20,0.8), #050b14), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop') center/cover;">
-        <p class="text-[#c5a059] font-bold tracking-[0.4em] uppercase mb-6 text-sm">Cancún, Quintana Roo</p>
-        <h2 class="text-6xl md:text-8xl font-black mb-4 font-orbitron uppercase tracking-tighter text-white drop-shadow-2xl">Soberanía</h2>
-        <h2 class="text-4xl md:text-6xl font-black mb-6 font-orbitron uppercase tracking-tighter text-white">En <span class="text-[#c5a059]">Cada Detalle</span></h2>
-        
-        <p class="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto mb-12 font-light leading-relaxed">
-            Infraestructura logística, administración de activos y blindaje patrimonial impulsado por Inteligencia Artificial.
-        </p>
-        
-        <div class="relative inline-block">
-            <button onclick="toggleChat()" class="bg-[#c5a059] text-black px-10 py-5 rounded-full font-black uppercase tracking-widest hover:bg-yellow-400 transition-all flex items-center gap-4">
-                Agendar Asesoría <i class="fa-solid fa-comment text-xl"></i>
-            </button>
-        </div>
-    </section>
-
-    <section class="py-20 px-6 max-w-7xl mx-auto space-y-24">
-        
-        <div id="auto" class="flex flex-col md:flex-row gap-12 items-center">
-            <div class="w-full md:w-1/2 division-card border-auto">
-                <div class="flex justify-between items-start mb-8">
-                    <i class="fa-solid fa-car text-6xl text-[#bef264]"></i>
-                    <span class="text-[10px] text-[#bef264] border border-[#bef264] px-3 py-1 rounded-full font-bold uppercase tracking-widest">Inversión Activa</span>
-                </div>
-                <h3 class="text-4xl font-black italic uppercase tracking-tighter mb-6">Socio de Flota</h3>
-                <p class="text-slate-400 text-lg leading-relaxed mb-8">Administración profesional de vehículos. Rentabilidad semanal líquida con monitoreo de 5,000 KM.</p>
-                <button onclick="toggleChat()" class="btn-division bg-[#bef264]">Me interesa invertir <i class="fa-solid fa-arrow-right"></i></button>
-            </div>
-            <div class="w-full md:w-1/2 pl-0 md:pl-10">
-                <div class="step-item"><div class="step-number">1</div><div class="step-text">Peritaje & Diagnóstico</div></div>
-                <div class="step-item"><div class="step-number">2</div><div class="step-text">Filtro de Personal</div></div>
-                <div class="step-item"><div class="step-number">3</div><div class="step-text">Bitácora Digital</div></div>
-                <div class="step-item"><div class="step-number">4</div><div class="step-text">Ejecución Estándar</div></div>
-                <div class="step-item"><div class="step-number">5</div><div class="step-text">Mantenimiento Preventivo</div></div>
-                <div class="step-item"><div class="step-number">6</div><div class="step-text">Reporte de Resultados</div></div>
-                <div class="step-item"><div class="step-number">7</div><div class="step-text text-[#c5a059]">Auditoría Continua Raymex</div></div>
-            </div>
-        </div>
-
-        <div id="empresa" class="flex flex-col md:flex-row-reverse gap-12 items-center">
-            <div class="w-full md:w-1/2 division-card border-empresa">
-                <div class="flex justify-between items-start mb-8">
-                    <i class="fa-solid fa-briefcase text-6xl text-[#0ea5e9]"></i>
-                    <span class="text-[10px] text-[#0ea5e9] border border-[#0ea5e9] px-3 py-1 rounded-full font-bold uppercase tracking-widest">Partner Corporativo</span>
-                </div>
-                <h3 class="text-4xl font-black italic uppercase tracking-tighter mb-6">Eficiencia Operativa</h3>
-                <p class="text-slate-400 text-lg leading-relaxed mb-8">Outsourcing logístico avanzado y blindaje legal. Nosotros operamos la estructura de su empresa.</p>
-                <button onclick="toggleChat()" class="btn-division bg-[#0ea5e9] text-white">Agendar Consultoría <i class="fa-solid fa-arrow-right"></i></button>
-            </div>
-            <div class="w-full md:w-1/2 pr-0 md:pr-10 text-center md:text-left">
-                <h2 class="text-3xl font-orbitron font-bold uppercase tracking-widest mb-6">El Poder de la<br><span class="text-[#0ea5e9]">Red Neural</span></h2>
-                <p class="text-slate-400 text-lg leading-relaxed">Integramos a nuestro equipo de Contadores y Abogados a través del sistema SOM V11, garantizando que su patrimonio esté protegido contra cualquier contingencia.</p>
-            </div>
-        </div>
-
-        <div id="hogar" class="flex flex-col md:flex-row gap-12 items-center">
-            <div class="w-full md:w-1/2 division-card border-hogar">
-                <div class="flex justify-between items-start mb-8">
-                    <i class="fa-solid fa-house text-6xl text-[#10b981]"></i>
-                    <span class="text-[10px] text-[#10b981] border border-[#10b981] px-3 py-1 rounded-full font-bold uppercase tracking-widest">Gestión Residencial</span>
-                </div>
-                <h3 class="text-4xl font-black italic uppercase tracking-tighter mb-6">Plusvalía VIP</h3>
-                <p class="text-slate-400 text-lg leading-relaxed mb-8">Protección técnica de su inmueble. Seguridad y valorización patrimonial con respuesta 24/7.</p>
-                <button onclick="toggleChat()" class="btn-division bg-[#10b981] text-white">Solicitar Gestión <i class="fa-solid fa-arrow-right"></i></button>
-            </div>
-            <div class="w-full md:w-1/2 pl-0 md:pl-10 text-center md:text-left">
-                 <h2 class="text-3xl font-orbitron font-bold uppercase tracking-widest mb-6">Tranquilidad<br><span class="text-[#10b981]">Absoluta</span></h2>
-                 <p class="text-slate-400 text-lg leading-relaxed">Desde propiedades de inversión en Airbnb hasta residencias de lujo. Grupo Raymex audita y ejecuta cada refacción necesaria con márgenes transparentes.</p>
-            </div>
-        </div>
-
-    </section>
-
-    <!-- FOOTER CON SUS LINKS -->
-    <footer class="border-t border-white/5 py-16 text-center">
-        <div class="flex justify-center gap-6 mb-12">
-            <!-- AQUÍ SUSTITUIR LOS LINKS CUANDO TENGA LA OPORTUNIDAD -->
-            <a href="https://wa.me/529986177700" target="_blank" class="w-16 h-16 rounded-full bg-[#c5a059] flex items-center justify-center text-black text-2xl hover:scale-110 transition-transform"><i class="fa-brands fa-whatsapp"></i></a>
-            <a href="https://instagram.com/grupo.raymex" target="_blank" class="w-16 h-16 rounded-full border border-slate-700 flex items-center justify-center text-white text-2xl hover:border-[#c5a059] hover:text-[#c5a059] transition-all"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://facebook.com/grupo.raymex" target="_blank" class="w-16 h-16 rounded-full border border-slate-700 flex items-center justify-center text-white text-2xl hover:border-[#c5a059] hover:text-[#c5a059] transition-all"><i class="fa-brands fa-facebook-f"></i></a>
-        </div>
-        
-        <p class="text-white font-bold tracking-[0.2em] mb-4 text-sm">WHATSAPP: +52 998 617 7700</p>
-        <p class="text-slate-400 font-bold tracking-[0.2em] mb-8 text-sm lowercase">correo: contacto.raymex@gmail.com</p>
-        <p class="text-[#c5a059] font-black tracking-[0.3em] uppercase mb-4">Cancún, Quintana Roo</p>
-        <p class="text-[10px] text-slate-600 tracking-[0.4em] uppercase font-bold">Propiedad de Raúl Ruiz López &copy; 2026</p>
-    </footer>
-
-    <!-- WIDGET DE CHAT (JEREMY PÚBLICA) -->
-    <div id="chat-widget">
-        <div id="chat-window">
-            <div class="bg-[#0a1120] p-5 border-b border-white/10 flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full border border-[#c5a059] flex items-center justify-center bg-slate-900"><i class="fa-solid fa-robot text-[#c5a059] text-sm"></i></div>
-                    <div>
-                        <h4 class="font-bold text-sm tracking-widest uppercase">Jeremy Core</h4>
-                        <p class="text-[10px] text-green-400 uppercase font-black tracking-widest">Atención Digital 24/7</p>
-                    </div>
-                </div>
-                <button onclick="toggleChat()" class="text-slate-500 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <div id="chat-messages">
-                <div class="msg-bubble msg-jeremy">
-                    Bienvenido a Grupo Raymex. Soy la inteligencia operativa del Director Raúl Ruiz. ¿Desea aplicar como socio conductor, o requiere nuestros servicios VIP para Hogar y Empresa?
-                </div>
-            </div>
-
-            <div class="p-4 bg-[#0a1120] border-t border-white/5 flex gap-2">
-                <input type="text" id="user-input" placeholder="Escriba su consulta..." class="flex-grow bg-slate-900 text-white rounded-xl px-4 py-3 text-sm outline-none focus:border-[#c5a059] border border-transparent transition-colors">
-                <button onclick="sendMessage()" class="bg-[#c5a059] text-black w-12 rounded-xl flex items-center justify-center hover:bg-yellow-400 transition-colors">
-                    <i class="fa-solid fa-paper-plane"></i>
-                </button>
-            </div>
-        </div>
-        <div id="chat-btn" onclick="toggleChat()" class="chat-toggle mt-4 ml-auto pulse">
-            <i class="fa-solid fa-message"></i>
-        </div>
-    </div>
-
-    <!-- PORTAL SOM V11 (LAS 4 PUERTAS - ACCESO RESTRINGIDO) -->
-    <div id="portal-modal">
-        <div class="text-center mb-10 relative">
-            <div class="w-24 h-24 bg-gradient-to-tr from-slate-800 to-slate-900 rounded-full mx-auto mb-6 flex items-center justify-center border-2 border-slate-600 shadow-2xl">
-                <span class="font-orbitron font-black text-3xl text-slate-400">GR</span>
-            </div>
-            <h2 class="font-orbitron text-2xl font-black tracking-widest uppercase italic text-white mb-2">Sistema Raymex</h2>
-            <p class="text-[10px] text-slate-500 uppercase tracking-[0.4em] font-black">SOM V11 | Acceso Restringido</p>
-        </div>
-        
-        <input type="password" id="portal-key" placeholder="INGRESE CLAVE |" class="input-clave">
-        <button onclick="checkPortalKey()" class="w-full max-w-[350px] bg-[#c5a059] text-black font-black py-5 rounded-2xl uppercase italic tracking-[0.2em] active:scale-95 transition-all">Iniciar Sesión</button>
-        <button onclick="closePortal()" class="mt-8 text-slate-500 text-sm uppercase tracking-widest font-bold underline">Volver al sitio público</button>
-    </div>
-
-    <script>
-        const apiKey = ""; // Llave API para el cerebro de captación
-        
-        /* LÓGICA DEL PORTAL (LAS 4 PUERTAS) */
-        function openPortal() { document.getElementById('portal-modal').style.display = 'flex'; }
-        function closePortal() { document.getElementById('portal-modal').style.display = 'none'; document.getElementById('portal-key').value = ''; }
-        
-        function checkPortalKey() {
-            const key = document.getElementById('portal-key').value.toUpperCase();
-            
-            if(key === 'RAYMEX2026' || key === 'RUIZ_MASTER') {
-                alert("AUTORIDAD CONFIRMADA: Bienvenido Director Raúl Ruiz. (En el futuro, esto lo redirigirá a su App V22 Privada)");
-            } 
-            else if(key === 'CONTADOR26' || key === 'RAYMEX_FINANZAS') {
-                alert("ACCESO FINANZAS: Redirigiendo a Médula de Cortes y B2B...");
-            }
-            else if(key === 'LEGAL26' || key === 'RAYMEX_LEGAL') {
-                alert("ACCESO JURÍDICO: Redirigiendo a módulo de Blindaje y Compliance...");
-            }
-            else {
-                alert("ACCESO DENEGADO. Intento registrado.");
-            }
-            closePortal();
-        }
-
-        /* LÓGICA DEL CHATBOT PÚBLICO (CAPTACIÓN DE LEADS) */
-        const chatWindow = document.getElementById('chat-window');
-        const chatMessages = document.getElementById('chat-messages');
-        const userInput = document.getElementById('user-input');
-        const chatBtn = document.getElementById('chat-btn');
-        let isChatOpen = false;
-        let isTyping = false;
-
-        function toggleChat() {
-            isChatOpen = !isChatOpen;
-            chatWindow.style.display = isChatOpen ? 'flex' : 'none';
-            if(isChatOpen) {
-                chatBtn.classList.remove('pulse');
-                chatBtn.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
-                userInput.focus();
-            } else {
-                chatBtn.innerHTML = '<i class="fa-solid fa-message"></i>';
-            }
-        }
-
-        function appendMessage(sender, text) {
-            const div = document.createElement('div');
-            div.className = `msg-bubble ${sender === 'user' ? 'msg-user' : 'msg-jeremy'}`;
-            div.innerText = text;
-            chatMessages.appendChild(div);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        async function sendMessage() {
-            const text = userInput.value.trim();
-            if (!text || isTyping) return;
-
-            appendMessage('user', text);
-            userInput.value = '';
-            isTyping = true;
-
-            const typingId = 'typing-' + Date.now();
-            chatMessages.insertAdjacentHTML('beforeend', `<div id="${typingId}" class="msg-bubble msg-jeremy text-slate-400 italic text-xs">Jeremy analizando...</div>`);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            try {
-                const systemPrompt = `Eres Jeremy, la IA pública de Grupo Raymex (Cancún). Director: Raúl Ruiz López.
-                Misión: Captar clientes y choferes.
-                1. Si quieren trabajar/rentar auto: Di que SÍ hay lugar, pero el proceso es estricto. Pide NOMBRE, WHATSAPP y EXPERIENCIA para que logística los contacte.
-                2. Si buscan mantenimiento de Hogar/Empresa: Pide ubicación y tipo de servicio.
-                3. Tono: Formal, corporativo, persuasivo.`;
-
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        contents: [{ parts: [{ text: text }] }],
-                        systemInstruction: { parts: [{ text: systemPrompt }] }
-                    })
-                });
-
-                const data = await response.json();
-                document.getElementById(typingId).remove();
-                appendMessage('jeremy', data.candidates[0].content.parts[0].text);
-            } catch (error) {
-                document.getElementById(typingId).remove();
-                appendMessage('jeremy', "Nuestros sistemas están procesando alto volumen. Por favor envíe un WhatsApp al +52 998 617 7700.");
-            } finally { isTyping = false; }
-        }
-
-        userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
-    </script>
+    <img src="logo-raymex.png" alt="Raymex Logo" class="logo">
+    <h1>GRUPO RAYMEX</h1>
+    <p>SISTEMA OPERATIVO MAESTRO V11</p>
+    <input type="password" id="passkey" placeholder="INGRESE LLAVE MAESTRA">
+    <br>
+    <button onclick="entrar()">Acceder al Sistema</button>
 </body>
 </html>
