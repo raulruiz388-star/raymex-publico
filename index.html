@@ -3,153 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Raymex | Dossier de Operatividad VIP</title>
+    <title>Raymex | Gestión VIP</title>
     
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="https://i.ibb.co/zV60f1gm/1000644130-modified.png">
     <meta name="theme-color" content="#020617">
-    <link rel="icon" href="https://i.ibb.co/zV60f1gm/1000644130-modified.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;900&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Urbanist', sans-serif; background-color: #020617; color: #f8fafc; margin: 0; min-height: 100vh; overflow-x: hidden; }
-        .glass-card { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08); border-radius: 28px; }
+        body { font-family: 'Urbanist', sans-serif; background-color: #020617; color: #f8fafc; margin: 0; overflow-x: hidden; }
+        .glass-card { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; }
         .gold-text { color: #d4af37; }
-        .bg-gold { background-color: #d4af37; }
         
-        /* DIVISIONES */
-        .card-auto { border-left: 6px solid #bef264; }
-        .card-hogar { border-left: 6px solid #10b981; }
-        .card-empresa { border-left: 6px solid #0ea5e9; }
-
-        .view { display: none; opacity: 0; padding-bottom: 100px; }
-        .view.active { display: block; opacity: 1; animation: fadeIn 0.4s ease-out; }
+        /* Ajuste para evitar encimamiento */
+        .nav-container { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 12px; }
         
-        #login-gate { position: fixed; inset: 0; z-index: 200; background: #020617; display: flex; align-items: center; justify-content: center; padding: 24px; }
+        .view { display: none; opacity: 0; }
+        .view.active { display: block; opacity: 1; animation: fadeIn 0.3s ease-out; }
+        
+        #login-gate { position: fixed; inset: 0; z-index: 999; background: #020617; display: flex; align-items: center; justify-content: center; padding: 20px; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .nav-btn { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #64748b; padding: 10px; transition: 0.3s; position: relative; }
-        .nav-btn.active { color: #d4af37; }
-        .nav-btn.active::after { content: ''; position: absolute; bottom: 0; left: 25%; width: 50%; height: 2px; background: #d4af37; }
-
-        .hero-section {
-            min-height: 80vh;
-            background-image: linear-gradient(to bottom, rgba(2, 6, 23, 0.4), #020617), url('https://i.ibb.co/Q3K8jmZY/1772302212490.png');
-            background-size: cover; background-position: center; display: flex; align-items: center; padding: 20px;
-        }
+        .nav-btn { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #64748b; padding: 8px 4px; transition: 0.3s; }
+        .nav-btn.active { color: #d4af37; border-bottom: 2px solid #d4af37; }
     </style>
 </head>
 <body>
 
     <div id="login-gate">
-        <div class="glass-card p-10 w-full max-w-sm text-center border-gold/20 border-2">
+        <div class="glass-card p-8 w-full max-w-sm text-center border-2 border-gold/20">
             <img src="https://i.ibb.co/zV60f1gm/1000644130-modified.png" class="h-20 mx-auto mb-6">
-            <h2 class="text-white font-black tracking-tighter text-xl uppercase italic">Sistema Raymex</h2>
-            <p class="gold-text text-[9px] tracking-[0.3em] font-bold mb-8 uppercase">Acceso Restringido</p>
-            <input type="password" id="master-key" placeholder="LLAVE MAESTRA" class="w-full bg-slate-900/50 border border-gold/30 rounded-xl p-4 text-center text-white tracking-[0.5em] mb-4 outline-none focus:border-gold">
-            <button onclick="checkKey()" class="w-full bg-gold text-slate-900 font-black py-4 rounded-xl uppercase text-xs tracking-widest">Iniciar Protocolo</button>
+            <h2 class="text-white font-black text-xl uppercase italic italic tracking-tighter">Sistema Raymex</h2>
+            <p class="gold-text text-[10px] font-bold mb-8 tracking-[0.2em]">ACCESO RESTRINGIDO</p>
+            <input type="password" id="master-key" placeholder="LLAVE MAESTRA" class="w-full bg-slate-900 border border-gold/30 rounded-xl p-4 text-center text-white mb-4 outline-none">
+            <button onclick="checkKey()" class="w-full bg-[#d4af37] text-slate-900 font-black py-4 rounded-xl uppercase text-xs tracking-widest">Entrar</button>
         </div>
     </div>
 
-    <div id="main-content" style="display: none;">
-        <nav class="fixed top-0 w-full z-50 bg-[#020617]/95 backdrop-blur-xl border-b border-white/5">
-            <div class="max-w-5xl mx-auto px-4 h-20 flex justify-between items-center">
-                <div class="flex items-center gap-2 cursor-pointer" oncontextmenu="return false;" onmousedown="startReset()" onmouseup="stopReset()" ontouchstart="startReset()" ontouchend="stopReset()">
-                    <img src="https://i.ibb.co/zV60f1gm/1000644130-modified.png" alt="Raymex" class="h-10 w-10 object-contain">
-                    <div>
-                        <h1 class="text-white text-base font-black tracking-tighter uppercase italic leading-none">Raymex</h1>
-                        <p class="text-[7px] gold-text uppercase tracking-widest font-bold">Gestión de Activos</p>
-                    </div>
-                </div>
-                <div class="flex gap-2">
-                    <button onclick="changeView('home')" id="btn-home" class="nav-btn active">Inicio</button>
-                    <button onclick="changeView('auto')" id="btn-auto" class="nav-btn">Auto</button>
-                    <button onclick="changeView('hogar')" id="btn-hogar" class="nav-btn">Hogar</button>
-                    <button onclick="changeView('empresa')" id="btn-empresa" class="nav-btn">Empresa</button>
+    <nav class="fixed top-0 w-full z-50 bg-[#020617]/90 border-b border-white/5 h-20 flex items-center">
+        <div class="nav-container">
+            <div class="flex items-center gap-3" onmousedown="startReset()" onmouseup="stopReset()" ontouchstart="startReset()" ontouchend="stopReset()">
+                <img src="https://i.ibb.co/zV60f1gm/1000644130-modified.png" class="h-10 w-10 object-contain">
+                <div class="hidden xs:block">
+                    <h1 class="text-white text-sm font-black uppercase italic leading-none">Raymex</h1>
+                    <p class="text-[7px] gold-text uppercase font-bold">Gestión</p>
                 </div>
             </div>
-        </nav>
-
-        <main id="home" class="view active">
-            <section class="hero-section">
-                <div class="max-w-4xl mx-auto w-full">
-                    <div class="w-16 h-1.5 bg-gold mb-8"></div>
-                    <h2 class="text-4xl md:text-8xl font-black mb-6 leading-[0.9] uppercase italic text-white tracking-tighter">EL LEGADO DE <br><span class="gold-text">UNA VISIÓN.</span></h2>
-                    <p class="text-lg md:text-2xl font-light italic text-slate-200 mb-10 max-w-xl">"Protejo este negocio con el mismo rigor con el que cuido el futuro de mi familia."</p>
-                    <div class="flex items-center gap-4 bg-white/5 p-4 rounded-3xl border border-white/10 w-fit">
-                        <div class="w-10 h-10 rounded-full bg-gold flex items-center justify-center text-slate-900 font-black text-sm uppercase">RR</div>
-                        <div><p class="text-xs font-bold uppercase text-white leading-none">Raúl Ruiz</p><p class="text-[8px] gold-text uppercase font-black">Director General</p></div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <main id="auto" class="view pt-32 px-6 max-w-5xl mx-auto">
-            <h2 class="text-4xl font-black gold-text mb-4 uppercase italic tracking-tighter">División Automotriz</h2>
-            <div class="glass-card p-8 card-auto mb-6">
-                <h3 class="text-xl font-bold text-white mb-2 uppercase">Flota Operativa</h3>
-                <p class="text-slate-400 text-sm italic">Gestión de unidades y mantenimiento bajo estándares Raymex.</p>
+            <div class="flex gap-2">
+                <button onclick="changeView('home')" id="btn-home" class="nav-btn active">Inicio</button>
+                <button onclick="changeView('auto')" id="btn-auto" class="nav-btn">Auto</button>
+                <button onclick="changeView('hogar')" id="btn-hogar" class="nav-btn">Hogar</button>
+                <button onclick="changeView('empresa')" id="btn-empresa" class="nav-btn">Empresa</button>
             </div>
-        </main>
+        </div>
+    </nav>
 
-        <main id="hogar" class="view pt-32 px-6 max-w-5xl mx-auto">
-            <h2 class="text-4xl font-black gold-text mb-4 uppercase italic tracking-tighter">División Hogar</h2>
-            <div class="glass-card p-8 card-hogar mb-6">
-                <h3 class="text-xl font-bold text-white mb-2 uppercase">Gestión Patrimonial</h3>
-                <p class="text-slate-400 text-sm italic">Protección y mantenimiento de activos inmobiliarios.</p>
-            </div>
-        </main>
+    <main id="home" class="view active pt-28 px-6 text-center">
+        <h2 class="text-3xl font-black text-white uppercase italic mb-4">Bienvenido, Director</h2>
+        <div class="w-12 h-1 bg-gold mx-auto mb-6"></div>
+        <p class="text-slate-400 italic">"Protejo este negocio con el mismo rigor con el que cuido el futuro de mi familia."</p>
+    </main>
 
-        <main id="empresa" class="view pt-32 px-6 max-w-5xl mx-auto">
-            <h2 class="text-4xl font-black gold-text mb-4 uppercase italic tracking-tighter">División Empresarial</h2>
-            <div class="glass-card p-8 card-empresa mb-6">
-                <h3 class="text-xl font-bold text-white mb-2 uppercase">Estructura de Capital</h3>
-                <p class="text-slate-400 text-sm italic">Optimización de flujos y consultoría corporativa.</p>
-            </div>
-        </main>
+    <main id="auto" class="view pt-28 px-6">
+        <h2 class="text-2xl font-black gold-text mb-4 uppercase">División Automotriz</h2>
+        <div class="glass-card p-6 border-l-4 border-lime-400">
+            <p class="text-white font-bold">Flota Operativa</p>
+            <p class="text-xs text-slate-400 italic">Gestión de unidades Raymex.</p>
+        </div>
+    </main>
 
-        <footer class="py-12 text-center opacity-30">
-            <p class="text-[8px] tracking-[0.5em] text-white uppercase italic">Confidencial &copy; 2026 | Grupo Raymex</p>
-        </footer>
-    </div>
+    <main id="hogar" class="view pt-28 px-6">
+        <h2 class="text-2xl font-black gold-text mb-4 uppercase">División Hogar</h2>
+        <div class="glass-card p-6 border-l-4 border-emerald-500">
+            <p class="text-white font-bold">Patrimonio</p>
+            <p class="text-xs text-slate-400 italic">Mantenimiento residencial.</p>
+        </div>
+    </main>
+
+    <main id="empresa" class="view pt-28 px-6">
+        <h2 class="text-2xl font-black gold-text mb-4 uppercase">División Empresa</h2>
+        <div class="glass-card p-6 border-l-4 border-sky-500">
+            <p class="text-white font-bold">Logística</p>
+            <p class="text-xs text-slate-400 italic">Estructura operativa corporativa.</p>
+        </div>
+    </main>
 
     <script>
-        // CONTROL DE ACCESO
         function checkKey() {
             const key = document.getElementById('master-key').value.trim().toUpperCase();
             if (['RUIZ_MASTER', 'HIJA_CONTROL', 'ROBERTO_SENTINEL'].includes(key)) {
                 document.getElementById('login-gate').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
                 localStorage.setItem('raymex_auth', 'active');
-            } else {
-                alert('LLAVE INVÁLIDA');
-            }
+            } else { alert('Llave Inválida'); }
         }
 
         if (localStorage.getItem('raymex_auth') === 'active') {
             document.getElementById('login-gate').style.display = 'none';
-            document.getElementById('main-content').style.display = 'block';
         }
 
-        // NAVEGACIÓN
         function changeView(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             document.getElementById('btn-' + id).classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo(0,0);
         }
 
-        // BOTÓN ESCONDIDO (RESET)
         let timer;
         function startReset() { timer = setTimeout(() => { localStorage.removeItem('raymex_auth'); location.reload(); }, 3000); }
         function stopReset() { clearTimeout(timer); }
-
-        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
     </script>
 </body>
-                        </html>
-                        
+</html>
