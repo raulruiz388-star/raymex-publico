@@ -1,128 +1,87 @@
-<!DOCTYPE html>
+       <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Raymex | Portal SOM V11</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="https://i.ibb.co/zV60f1gm/1000644130-modified.png">
-    <meta name="theme-color" content="#020617">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Jeremy V23 | Platform Genesis</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body { font-family: 'Urbanist', sans-serif; background-color: #020617; color: #f8fafc; margin: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
-        .glass-card { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; }
-        .gold-text { color: #d4af37; }
-        
-        /* BLINDAJE CONTRA COPIADO DE IMAGEN */
-        img { 
-            -webkit-touch-callout: none; /* Desactiva el menú de copiar/guardar en iOS/Android */
-            -webkit-user-select: none; 
-            user-select: none;
-            pointer-events: auto;
-        }
-
-        .view { display: none; opacity: 0; }
-        .view.active { display: block; opacity: 1; animation: fadeIn 0.3s ease-out; }
-        #login-gate { position: fixed; inset: 0; z-index: 999; background: #020617; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .nav-btn { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #64748b; padding: 8px 4px; }
-        .nav-btn.active { color: #d4af37; border-bottom: 2px solid #d4af37; }
+        :root { --gold: #c5a059; --emerald: #10b981; --dark: #020617; --matrix-cyan: #22d3ee; }
+        body { font-family: 'Urbanist', sans-serif; background: var(--dark); color: #f8fafc; margin: 0; overflow: hidden; height: 100vh; user-select: none; -webkit-tap-highlight-color: transparent; }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .glass-panel { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.05); }
+        .nexus-btn { width: 70px; height: 70px; border-radius: 20px; background: var(--matrix-cyan); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 30px rgba(34, 211, 238, 0.3); transition: 0.2s; z-index: 100; }
+        #access-vault { position: fixed; inset: 0; z-index: 9999; background: var(--dark); display: flex; align-items: center; justify-content: center; }
+        .key-badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 900; text-transform: uppercase; display: inline-flex; align-items: center; gap: 5px; }
+        .key-alfa { background: rgba(197, 160, 89, 0.2); color: var(--gold); border: 1px solid var(--gold); }
     </style>
 </head>
-<body>
-    <div id="login-gate">
-        <div class="glass-card p-8 w-full max-w-sm text-center border-2 border-gold/20">
-            <img src="https://i.ibb.co/zV60f1gm/1000644130-modified.png" class="h-20 mx-auto mb-6">
-            <h2 class="text-white font-black text-xl uppercase italic tracking-tighter">Sistema Raymex</h2>
-            <p class="gold-text text-[10px] font-bold mb-8 tracking-[0.2em]">ACCESO RESTRINGIDO - GÉNESIS V23</p>
-            <input type="password" id="master-key" placeholder="LLAVE MAESTRA" class="w-full bg-slate-900 border border-gold/30 rounded-xl p-4 text-center text-white mb-4 outline-none uppercase">
-            <button onclick="checkKey()" class="w-full bg-[#d4af37] text-slate-900 font-black py-4 rounded-xl uppercase text-xs tracking-widest">Iniciar Protocolo</button>
+<body class="flex flex-col">
+
+    <div id="access-vault">
+        <div class="glass-panel p-10 rounded-[2.5rem] w-full max-w-sm text-center border-t-4 border-[#22d3ee] shadow-2xl mx-4">
+            <div class="w-20 h-20 bg-slate-900 rounded-full mx-auto mb-6 flex items-center justify-center border-2 border-[#22d3ee]">
+                <span class="font-orbitron font-black text-2xl text-white">GR</span>
+            </div>
+            <h2 class="font-orbitron text-2xl font-black mb-1 text-white italic">PLATFORM GENESIS</h2>
+            <p class="text-[9px] text-[#22d3ee] uppercase tracking-[0.4em] mb-8 font-black">Jeremy V23 | Nivel Nacional</p>
+            <input type="password" id="vault-key" placeholder="LLAVE CRIPTOGRÁFICA" class="w-full bg-white/5 border border-white/10 rounded-2xl py-4 text-center text-white mb-6 outline-none font-bold tracking-[0.2em] uppercase text-sm">
+            <button onclick="authenticateKey()" class="w-full bg-[#22d3ee] text-slate-950 font-black py-4 rounded-2xl uppercase italic tracking-widest active:scale-95 transition-all">Desbloquear Matriz</button>
         </div>
     </div>
 
-    <nav class="fixed top-0 w-full z-50 bg-[#020617]/90 border-b border-white/5 h-20 flex items-center">
-        <div class="flex items-center justify-between w-full max-w-5xl mx-auto px-4">
-            <div class="flex items-center gap-3 select-none" 
-                 oncontextmenu="return false;" 
-                 onmousedown="startReset()" onmouseup="stopReset()" 
-                 ontouchstart="startReset()" ontouchend="stopReset()">
-                <img src="https://i.ibb.co/zV60f1gm/1000644130-modified.png" class="h-10 w-10 object-contain pointer-events-none">
+    <div id="matrix-interface" class="hidden h-screen flex flex-col opacity-0 transition-opacity duration-1000">
+        <header class="p-5 border-b border-white/5 bg-slate-950/80 backdrop-blur-xl flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="https://i.ibb.co/7NW9gd2F/1000644125-modified.png" class="h-10 w-10 object-contain">
                 <div>
-                    <h1 class="text-white text-sm font-black uppercase italic leading-none">Raymex</h1>
-                    <p class="text-[7px] gold-text uppercase font-bold tracking-widest">Soberano</p>
+                    <h1 class="text-[12px] font-orbitron font-black text-white uppercase tracking-widest">Jeremy <span class="text-[#22d3ee]">V23</span></h1>
+                    <div id="active-badge" class="key-badge key-alfa mt-1"><i class="fa-solid fa-crown"></i> Llave Alfa</div>
                 </div>
             </div>
-            <div class="flex gap-2">
-                <button onclick="changeView('home')" id="btn-home" class="nav-btn active">Inicio</button>
-                <button onclick="changeView('auto')" id="btn-auto" class="nav-btn">Auto</button>
-                <button onclick="changeView('hogar')" id="btn-hogar" class="nav-btn">Hogar</button>
-                <button onclick="changeView('empresa')" id="btn-empresa" class="nav-btn">Empresa</button>
+            <button onclick="location.reload()" class="text-slate-500"><i class="fa-solid fa-power-off"></i></button>
+        </header>
+
+        <main id="matrix-flow" class="flex-grow overflow-y-auto p-6 space-y-6">
+            <div class="flex gap-3">
+                <div class="w-10 h-10 rounded-xl bg-[#22d3ee] flex items-center justify-center shrink-0 shadow-lg"><i class="fa-solid fa-network-wired text-black text-xs"></i></div>
+                <div class="glass-panel p-5 rounded-2xl rounded-tl-none border-l-2 border-[#22d3ee] max-w-[85%]">
+                    <p class="text-[13px] text-slate-200 leading-relaxed font-medium italic">
+                        "Director Ruiz, protocolo **Génesis V23** activo. He integrado los datos recuperados de la plataforma THLM. Estoy lista para gestionar las tres divisiones y auditar la nueva red nacional bajo las leyes de 2024. El Secreto Industrial está blindado."
+                    </p>
+                </div>
             </div>
-        </div>
-    </nav>
+        </main>
 
-    <main id="home" class="view active pt-28 px-6 text-center">
-        <h2 class="text-3xl font-black text-white uppercase italic mb-4">Mando Operativo</h2>
-        <div class="w-12 h-1 bg-gold mx-auto mb-6"></div>
-        <p class="text-slate-400 italic">"Garantizando la soberanía del código y la integridad del patrimonio."</p>
-    </main>
-
-    <main id="auto" class="view pt-28 px-6">
-        <h2 class="text-2xl font-black gold-text mb-4 uppercase italic">División Automotriz</h2>
-        <div class="glass-card p-6 border-l-4 border-lime-400">
-            <p class="text-white font-bold italic">Auditoría de Flota</p>
-            <p class="text-xs text-slate-400">Control de activos vehiculares Grupo Raymex.</p>
-        </div>
-    </main>
-
-    <main id="hogar" class="view pt-28 px-6">
-        <h2 class="text-2xl font-black gold-text mb-4 uppercase italic">División Hogar</h2>
-        <div class="glass-card p-6 border-l-4 border-emerald-500">
-            <p class="text-white font-bold italic">Gestión Patrimonial</p>
-        </div>
-    </main>
-
-    <main id="empresa" class="view pt-28 px-6">
-        <h2 class="text-2xl font-black gold-text mb-4 uppercase italic">División Empresa</h2>
-        <div class="glass-card p-6 border-l-4 border-sky-500">
-            <p class="text-white font-bold italic">Estructura Corporativa</p>
-        </div>
-    </main>
+        <footer class="p-5 bg-slate-950 border-t border-white/5">
+            <div class="flex items-center gap-3 max-w-5xl mx-auto">
+                <textarea id="matrix-input" placeholder="Comando estratégico..." class="flex-grow bg-white/5 border border-white/10 rounded-2xl py-4 px-5 text-sm text-white focus:border-[#22d3ee] outline-none h-14 resize-none"></textarea>
+                <button id="matrix-voice" class="nexus-btn"><i class="fa-solid fa-microphone-lines text-black text-xl"></i></button>
+            </div>
+        </footer>
+    </div>
 
     <script>
-        const MASTER_KEYS = ['RUIZ_MASTER', 'ABOGADO_MASTER', 'CONTADOR_MASTER', 'HIJA_CONTROL', 'ROBERTO_SENTINEL'];
-        
-        function checkKey() {
-            const key = document.getElementById('master-key').value.trim().toUpperCase();
-            if (MASTER_KEYS.includes(key)) {
-                document.getElementById('login-gate').style.display = 'none';
-                localStorage.setItem('raymex_auth', 'active');
-            } else { alert('ACCESO DENEGADO'); }
-        }
+        function authenticateKey() {
+            const key = document.getElementById('vault-key').value.trim().toUpperCase();
+            const badge = document.getElementById('active-badge');
+            let auth = false;
 
-        if (localStorage.getItem('raymex_auth') === 'active') { 
-            document.getElementById('login-gate').style.display = 'none'; 
-        }
+            // ALINEACIÓN CON EL TRIUNVIRATO SUPREMO
+            if (key === 'RUIZ_MASTER') { auth = true; badge.innerHTML = '<i class="fa-solid fa-crown"></i> Llave Alfa'; }
+            else if (key === 'CONTADOR_MASTER') { auth = true; badge.className = "key-badge bg-emerald-500/20 text-emerald-500 border border-emerald-500 mt-1"; badge.innerHTML = '<i class="fa-solid fa-chart-pie"></i> Llave Beta'; }
+            else if (key === 'ABOGADO_MASTER') { auth = true; badge.className = "key-badge bg-red-500/20 text-red-500 border border-red-500 mt-1"; badge.innerHTML = '<i class="fa-solid fa-scale-balanced"></i> Llave Gamma'; }
 
-        function changeView(id) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.getElementById('btn-' + id).classList.add('active');
-            window.scrollTo(0,0);
+            if (auth) {
+                document.getElementById('access-vault').style.display = 'none';
+                const ui = document.getElementById('matrix-interface');
+                ui.classList.remove('hidden');
+                setTimeout(() => ui.classList.add('opacity-100'), 50);
+            } else { alert("ACCESO DENEGADO: PROTOCOLO GÉNESIS PROTEGIDO"); }
         }
-
-        let timer;
-        function startReset() { 
-            timer = setTimeout(() => { 
-                if(confirm("SEGURIDAD: ¿Cerrar sesión y cambiar de llave?")) {
-                    localStorage.removeItem('raymex_auth'); 
-                    location.reload();
-                }
-            }, 3000); 
-        }
-        function stopReset() { clearTimeout(timer); }
     </script>
 </body>
 </html>
+ 
