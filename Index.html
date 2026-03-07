@@ -3,49 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Raymex | Central de Activos</title>
+    <title>Raymex | Dossier de Operatividad VIP</title>
     
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#c5a059">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/7NW9gd2F/1000644125-modified.png">
+    <meta name="theme-color" content="#020617">
+    <link rel="icon" href="https://i.ibb.co/7NW9gd2F/1000644125-modified.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Urbanist', sans-serif; background-color: #020617; color: #f8fafc; margin: 0; overflow-x: hidden; scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+        .glass-card { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08); border-radius: 28px; }
+        .gold-text { color: #d4af37; }
+        .bg-gold { background-color: #d4af37; }
+        
+        .card-auto { border-left: 6px solid #bef264; }
+        .card-hogar { border-left: 6px solid #10b981; }
+        .card-empresa { border-left: 6px solid #0ea5e9; }
+
+        .view { display: none; opacity: 0; }
+        .view.active { display: block; opacity: 1; animation: fadeIn 0.5s ease-out; }
+        
+        #login-gate { position: fixed; inset: 0; z-index: 100; background: #020617; display: flex; align-items: center; justify-content: center; padding: 24px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .nav-btn { position: relative; font-size: 10px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: #64748b; padding: 4px; transition: 0.3s; }
+        .nav-btn.active { color: #d4af37; }
+        .nav-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px; background: #d4af37; }
+
+        .hero-section {
+            min-height: 85vh;
+            background-image: linear-gradient(to bottom right, #020617, rgba(2, 6, 23, 0.9), rgba(2, 6, 23, 0.6)), url('https://i.ibb.co/Q3K8jmZY/1772302212490.png');
+            background-size: cover; background-position: center; display: flex; align-items: center; padding: 80px 24px 40px 24px; position: relative;
+        }
+    </style>
+</head>
+<body class="pb-12">
+
+    <div id="login-gate">
+        <div class="glass-card p-10 w-full max-w-sm text-center border-gold/20 border-2">
+            <img src="https://i.ibb.co/7NW9gd2F/1000644125-modified.png" class="h-20 mx-auto mb-6">
+            <h2 class="text-white font-black tracking-tighter text-xl uppercase italic">Sistema Raymex</h2>
+            <p class="gold-text text-[9px] tracking-[0.3em] font-bold mb-8">SOM V11 | ACCESO RESTRINGIDO</p>
+            
+            <input type="password" id="master-key" placeholder="LLAVE MAESTRA" 
+                class="w-full bg-slate-900/50 border border-gold/30 rounded-xl p-4 text-center text-white tracking-[0.5em] mb-4 outline-none focus:border-gold">
+            
+            <button onclick="checkKey()" class="w-full bg-gold text-slate-900 font-black py-4 rounded-xl uppercase text-xs tracking-widest hover:brightness-110 transition">Iniciar Protocolo</button>
+        </div>
+    </div>
+
+    <div id="main-content" style="display: none;">
+        <nav class="fixed top-0 w-full z-50 bg-[#020617]/95 backdrop-blur-xl border-b border-white/5">
+            <div class="max-w-5xl mx-auto px-4 h-20 flex justify-between items-center text-white">
+                <div class="flex items-center gap-2 cursor-pointer" onclick="changeView('home')">
+                    <img src="https://i.ibb.co/7NW9gd2F/1000644125-modified.png" alt="Raymex" class="h-10 w-10 sm:h-12 sm:w-12 object-contain">
+                    <div>
+                        <h1 class="text-base sm:text-lg font-black tracking-tighter uppercase italic leading-none">Raymex</h1>
+                        <p class="text-[7px] sm:text-[8px] gold-text uppercase tracking-widest font-bold mt-1">Gestión de Activos</p>
+                    </div>
+                </div>
+                <div class="flex gap-2 sm:gap-6">
+                    <button onclick="changeView('home')" id="btn-home" class="nav-btn active">Inicio</button>
+                    <button onclick="changeView('auto')" id="btn-auto" class="nav-btn">Auto</button>
+                    <button onclick="changeView('hogar')" id="btn-hogar" class="nav-btn">Hogar</button>
+                    <button onclick="changeView('empresa')" id="btn-empresa" class="nav-btn">Empresa</button>
+                </div>
+            </div>
+        </nav>
+
+        <main id="home" class="view active">
+            <section class="hero-section">
+                <div class="max-w-4xl mx-auto w-full relative z-10">
+                    <div class="w-16 h-1.5 bg-gold mb-8"></div>
+                    <h2 class="text-4xl md:text-8xl font-black mb-6 leading-[0.9] uppercase italic text-white tracking-tighter">EL LEGADO DE <br><span class="gold-text">UNA VISIÓN.</span></h2>
+                    <p class="text-lg md:text-2xl font-light italic text-slate-200 mb-10 max-w-xl italic">"Protejo este negocio con el mismo rigor con el que cuido el futuro de mi familia."</p>
+                    <div class="flex items-center gap-5 bg-white/5 p-4 rounded-3xl border border-white/10 backdrop-blur-xl w-fit">
+                        <div class="w-12 h-12 rounded-full bg-gold flex items-center justify-center text-slate-900 font-black text-xl">RR</div>
+                        <div><p class="text-sm font-bold uppercase tracking-widest text-white leading-none mb-1">Raúl Ruiz</p><p class="text-[10px] gold-text uppercase font-black">Director General | Cancún</p></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <main id="auto" class="view pt-32 px-6 max-w-5xl mx-auto">
+            <h2 class="text-4xl font-black gold-text mb-4 uppercase italic tracking-tighter">División Automotriz</h2>
+            <div class="glass-card p-8 card-auto shadow-2xl">
+                <h3 class="text-2xl font-black mb-6 uppercase text-white">Administración Integral</h3>
+                <p class="text-sm text-slate-400 leading-relaxed italic mb-8">Gestión de flota bajo esquema de doble turno y mantenimiento preventivo Raymex.</p>
+                <a href="https://wa.me/529986177700" class="block w-full py-5 bg-[#bef264] text-slate-950 text-center rounded-2xl font-black text-xs uppercase tracking-widest">Consultar Inversión</a>
+            </div>
+        </main>
+
+        <main id="hogar" class="view pt-32 px-6 max-w-5xl mx-auto">
+            <h2 class="text-4xl font-black gold-text mb-4 uppercase italic tracking-tighter">División Hogar</h2>
+            <div class="glass-card p-8 card-hogar shadow-2xl">
+                <h3 class="text-2xl font-black mb-6 uppercase text-white">Protección de Plusvalía</h3>
+                <p class="text-sm text-slate-400 leading-relaxed italic mb-8">Bitácora QR y personal auditado para el mantenimiento de su patrimonio residencial.</p>
+                <a href="https://wa.me/529986177700" class="block w-full py-5 bg-[#10b981] text-white text-center rounded-2xl font-black text-xs uppercase tracking-widest">Solicitar Gestión</a>
+            </div>
+        </main>
+
+        <main id="empresa" class="view pt-32 px-6 max-w-5xl mx-auto">
+            <h2 class="text-4xl font-black gold-text mb-4 uppercase italic tracking-tighter">División Empresarial</h2>
+            <div class="glass-card p-8 card-empresa shadow-2xl">
+                <h3 class="text-2xl font-black mb-6 uppercase text-white">Eficiencia Operativa</h3>
+                <p class="text-sm text-slate-400 leading-relaxed italic mb-8">Outsourcing logístico y optimización de flujos de capital corporativo.</p>
+                <a href="https://wa.me/529986177700" class="block w-full py-5 bg-[#0ea5e9] text-white text-center rounded-2xl font-black text-xs uppercase tracking-widest">Agendar Consultoría</a>
+            </div>
+        </main>
+
+        <footer class="py-16 px-6 bg-[#010411] border-t border-white/5 mt-12 text-center">
+            <p class="text-slate-700 text-[8px] tracking-[0.4em] uppercase">Confidencial &copy; 2026 | Grupo Raymex</p>
+        </footer>
+    </div>
 
     <script>
-        // Registrar el motor de la App
+        function checkKey() {
+            const key = document.getElementById('master-key').value.trim().toUpperCase();
+            if (key === 'RUIZ_MASTER' || key === 'HIJA_CONTROL' || key === 'ROBERTO_SENTINEL') {
+                document.getElementById('login-gate').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                localStorage.setItem('raymex_auth', 'active');
+            } else {
+                alert('LLAVE INVÁLIDA. RIGOR ABSOLUTO.');
+            }
+        }
+
+        if (localStorage.getItem('raymex_auth') === 'active') {
+            document.getElementById('login-gate').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+        }
+
+        function changeView(id) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            const btn = document.getElementById('btn-' + id);
+            if(btn) btn.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');
         }
-
-        // Lógica de Acceso SOM V11
-        function entrar() {
-            const llave = document.getElementById('passkey').value.trim().toUpperCase();
-            
-            if (llave === 'RUIZ_MASTER') {
-                alert('BIENVENIDO DIRECTOR. ACCESO TOTAL.');
-                window.location.href = 'https://tu-plataforma-real.com/admin'; 
-            } else if (llave === 'HIJA_CONTROL') {
-                alert('ACCESO SUPERVISORA. MONITOR ACTIVO.');
-                window.location.href = 'https://tu-plataforma-real.com/supervision';
-            } else if (llave === 'ROBERTO_SENTINEL') {
-                alert('CENTINELA ACTIVADO. MONITOR DE INTEGRIDAD.');
-                window.location.href = 'https://tu-plataforma-real.com/sentinel';
-            } else {
-                alert('LLAVE NO RECONOCIDA. RIGOR ABSOLUTO.');
-            }
-        }
     </script>
-
-    <style>
-        body { background: #050b14; color: #c5a059; font-family: sans-serif; text-align: center; padding-top: 50px; }
-        input { padding: 12px; border: 1px solid #c5a059; background: #0a101e; color: white; width: 80%; max-width: 300px; text-align: center; margin-bottom: 20px; border-radius: 5px; }
-        button { padding: 12px 40px; background: #c5a059; color: black; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; text-transform: uppercase; }
-        .logo { width: 150px; margin-bottom: 20px; }
-    </style>
-</head>
-<body>
-    <img src="logo-raymex.png" alt="Raymex Logo" class="logo">
-    <h1>GRUPO RAYMEX</h1>
-    <p>SISTEMA OPERATIVO MAESTRO V11</p>
-    <input type="password" id="passkey" placeholder="INGRESE LLAVE MAESTRA">
-    <br>
-    <button onclick="entrar()">Acceder al Sistema</button>
 </body>
 </html>
