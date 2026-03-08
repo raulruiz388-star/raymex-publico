@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Jeremy V29 | Platform Genesis</title>
+    <title>Jeremy V30 | Raymex Genesis</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;900&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root { --cyan: #22d3ee; --dark: #020617; }
@@ -31,7 +31,7 @@
     <header class="p-4 bg-slate-950 flex justify-between items-center pt-[env(safe-area-inset-top)] border-b border-cyan-500/30">
         <div class="flex items-center gap-2 no-select active:scale-95 transition-transform cursor-pointer" onclick="resetVault()">
             <img src="https://i.ibb.co/7NW9gd2F/1000644125-modified.png" class="h-8 w-8 object-contain pointer-events-none">
-            <h1 class="text-[10px] font-orbitron font-black text-white uppercase tracking-widest">Jeremy <span class="text-[#22d3ee]">V29</span></h1>
+            <h1 class="text-[10px] font-orbitron font-black text-white uppercase tracking-widest">Jeremy <span class="text-[#22d3ee]">V30</span></h1>
         </div>
         <div id="badge-display" class="px-2 py-1 rounded-md text-[8px] font-black uppercase bg-white/5 border border-white/10 text-white italic">ESPERANDO...</div>
     </header>
@@ -41,8 +41,8 @@
     <footer class="console-footer">
         <div class="flex items-center gap-2 max-w-5xl mx-auto">
             <div class="flex-grow bg-slate-900/80 rounded-xl border border-white/10 flex items-center px-3">
-                <textarea id="matrix-input" placeholder="Dictar orden operativa..." class="w-full bg-transparent py-3 text-[15px] text-white outline-none h-11 resize-none"></textarea>
-                <button onclick="processCommand()" class="p-2 text-[#22d3ee] active:scale-75"><i class="fa-solid fa-paper-plane text-lg"></i></button>
+                <textarea id="matrix-input" placeholder="Dictar orden..." class="w-full bg-transparent py-3 text-[15px] text-white outline-none h-11 resize-none"></textarea>
+                <button onclick="sendCommand()" class="p-2 text-[#22d3ee] active:scale-75"><i class="fa-solid fa-paper-plane text-lg"></i></button>
             </div>
             <div onclick="startVoiceAction()" class="nexus-btn active:scale-90"><i id="mic-icon" class="fa-solid fa-microphone text-black text-lg"></i></div>
         </div>
@@ -50,95 +50,81 @@
 
     <script>
         const URL_VERCEL = "https://jeremy-core-v23.vercel.app/api/chat";
-        let currentAuthority = "";
+        let currentAuth = "";
 
         function speak(text) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const msg = new SpeechSynthesisUtterance(text.replace(/[*_#]/g, ''));
                 msg.lang = 'es-MX';
-                msg.rate = 1.0;
                 window.speechSynthesis.speak(msg);
             }
         }
 
         function authenticateKey() {
+            const keys = ['RUIZ_MASTER', 'CONTADOR_MASTER', 'ABOGADO_MASTER', 'ROBERT_SENTINEL'];
             const key = document.getElementById('vault-key').value.trim().toUpperCase();
-            if (['RUIZ_MASTER', 'CONTADOR_MASTER', 'ABOGADO_MASTER'].includes(key)) {
-                currentAuthority = key.split('_')[0];
-                document.getElementById('badge-display').innerText = currentAuthority + " ACTIVE";
+            
+            if (keys.includes(key)) {
+                currentAuth = key;
+                document.getElementById('badge-display').innerText = currentAuth + " ACTIVE";
                 document.getElementById('access-vault').style.display = 'none';
-                
-                const welcome = "Sistemas Raymex operando en tiempo real. Bienvenida, autoridad " + currentAuthority;
+                const welcome = "Sistemas Raymex operando en tiempo real. Bienvenida, autoridad " + currentAuth;
                 appendLog('jeremy', welcome);
                 speak(welcome);
             } else { alert("ACCESO DENEGADO"); }
         }
 
-        // FUNCIÓN DEL LOGO: SALIR Y CAMBIAR DE LLAVE
         function resetVault() {
-            if(confirm("¿Cerrar sesión y cambiar de autoridad operativa?")) {
-                document.getElementById('access-vault').style.display = 'flex';
-                document.getElementById('vault-key').value = '';
-                document.getElementById('matrix-flow').innerHTML = '';
-                window.speechSynthesis.cancel();
-            }
+            if(confirm("¿Cerrar sesión operativa?")) { location.reload(); }
         }
 
         function appendLog(role, text) {
             const flow = document.getElementById('matrix-flow');
             const div = document.createElement('div');
             div.className = `flex gap-3 ${role === 'user' ? 'flex-row-reverse' : ''}`;
-            div.innerHTML = `
-                <div class="w-8 h-8 rounded-lg ${role==='user'?'bg-slate-700':'bg-[#22d3ee]'} flex items-center justify-center shrink-0 shadow-lg">
-                    <i class="fa-solid ${role==='user'?'fa-user-tie':'fa-robot'} text-[10px] ${role==='user'?'text-white':'text-black'}"></i>
-                </div>
-                <div class="glass p-3 rounded-xl max-w-[85%] ${role==='user'?'border-r-2 border-amber-500':'border-l-2 border-[#22d3ee]'}">
-                    <p class="text-[14px] text-slate-200">${text}</p>
-                </div>`;
+            div.innerHTML = `<div class="w-8 h-8 rounded-lg ${role==='user'?'bg-slate-700':'bg-[#22d3ee]'} flex items-center justify-center shrink-0 shadow-lg"><i class="fa-solid ${role==='user'?'fa-user-tie':'fa-robot'} text-[10px] ${role==='user'?'text-white':'text-black'}"></i></div><div class="glass p-3 rounded-xl max-w-[85%] ${role==='user'?'border-r-2 border-amber-500':'border-l-2 border-[#22d3ee]'}"><p class="text-[14px] text-slate-200">${text}</p></div>`;
             flow.appendChild(div);
             flow.scrollTop = flow.scrollHeight;
         }
 
-        async function processCommand(manualText = null) {
+        async function sendCommand(manualText = null) {
             const input = document.getElementById('matrix-input');
             const text = manualText || input.value.trim();
             if(!text) return;
 
             appendLog('user', text);
             input.value = '';
-            
             const thinkId = 'think-' + Date.now();
-            appendLog('jeremy', `<span id="${thinkId}" class="animate-pulse">Consultando Sapiencia Raymex...</span>`);
+            appendLog('jeremy', `<span id="${thinkId}" class="animate-pulse">Consultando Núcleo...</span>`);
 
             try {
                 const response = await fetch(URL_VERCEL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: text })
+                    body: JSON.stringify({ text: text, authority: currentAuth })
                 });
-
                 const data = await response.json();
-                const aiText = data.candidates[0].content.parts[0].text;
+                const aiText = data.candidates[0].parts[0].text;
                 document.getElementById(thinkId).parentElement.innerHTML = aiText;
                 speak(aiText);
             } catch (e) {
-                document.getElementById(thinkId).parentElement.innerHTML = "Error de conexión con el núcleo.";
+                document.getElementById(thinkId).parentElement.innerHTML = "Error de núcleo. Reintentando enlace...";
             }
         }
 
         function startVoiceAction() {
             const mic = document.getElementById('mic-icon');
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (SpeechRecognition) {
-                const rec = new SpeechRecognition();
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (SpeechRec) {
+                const rec = new SpeechRec();
                 rec.lang = 'es-MX';
-                rec.onstart = () => { mic.className = "fa-solid fa-wave-square animate-pulse text-white"; };
+                rec.onstart = () => mic.className = "fa-solid fa-wave-square animate-pulse text-white";
                 rec.onresult = (e) => {
                     mic.className = "fa-solid fa-microphone text-black";
-                    processCommand(e.results[0][0].transcript);
+                    sendCommand(e.results[0][0].transcript);
                 };
-                rec.onerror = () => { mic.className = "fa-solid fa-microphone text-black"; };
+                rec.onerror = () => mic.className = "fa-solid fa-microphone text-black";
                 rec.start();
             }
         }
