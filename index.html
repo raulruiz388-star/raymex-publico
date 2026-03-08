@@ -2,121 +2,128 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Jeremy V30.1 | Grupo Raymex</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>ROAD RAYMEX | Registro Federal de Soberanía</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;900&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;600;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
-        :root { --cyan: #22d3ee; --dark: #020617; }
-        body, html { height: 100dvh; margin: 0; background: var(--dark); color: #f8fafc; font-family: 'Urbanist', sans-serif; overflow: hidden; position: fixed; width: 100%; }
-        .glass { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
-        #matrix-flow { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .console-footer { padding: 12px; padding-bottom: calc(env(safe-area-inset-bottom) + 12px); background: #020617; border-top: 1px solid rgba(34, 211, 238, 0.3); }
-        .nexus-btn { width: 55px; height: 55px; border-radius: 15px; background: var(--cyan); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        :root { --gold: #c5a059; --dark: #020617; --cyan: #22d3ee; }
+        body { font-family: 'Urbanist', sans-serif; background: var(--dark); color: white; scroll-behavior: smooth; }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
+        .btn-raymex { background: var(--gold); color: black; font-weight: 900; transition: 0.3s; text-transform: uppercase; letter-spacing: 2px; }
+        .btn-raymex:hover { transform: scale(1.02); box-shadow: 0 10px 30px rgba(197, 160, 89, 0.4); }
+        .loader { border: 2px solid #f3f3f3; border-top: 2px solid var(--gold); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="flex flex-col">
+<body>
 
-    <div id="access-vault" class="fixed inset-0 z-[9999] bg-[#020617] flex items-center justify-center p-6">
-        <div class="glass p-8 rounded-[2.5rem] w-full max-w-sm text-center border-t-4 border-[#22d3ee]">
-            <h2 class="font-orbitron text-xl font-black mb-1 text-white italic">RAYMEX GENESIS</h2>
-            <p class="text-[8px] text-[#22d3ee] uppercase tracking-[0.3em] mb-8 font-black">Sistemas Raymex Operando en Tiempo Real</p>
-            <input type="password" id="vault-key" placeholder="LLAVE MAESTRA" class="w-full bg-slate-900 border border-white/10 rounded-2xl py-4 text-center text-white mb-6 outline-none font-bold uppercase">
-            <button onclick="authenticateKey()" class="w-full bg-[#22d3ee] text-slate-950 font-black py-4 rounded-2xl uppercase tracking-widest active:scale-95 transition-all">Desbloquear</button>
+    <!-- NAV -->
+    <nav class="fixed w-full z-50 p-6 flex justify-between items-center backdrop-blur-md border-b border-white/5">
+        <div class="flex items-center gap-3">
+            <img src="https://i.ibb.co/7NW9gd2F/1000644125-modified.png" class="h-10 w-10">
+            <span class="font-orbitron font-black text-xl tracking-tighter uppercase">Road <span class="text-[#c5a059]">Raymex</span></span>
         </div>
-    </div>
+    </nav>
 
-    <header class="p-4 bg-slate-950 flex justify-between items-center pt-[env(safe-area-inset-top)] border-b border-cyan-500/30">
-        <div class="flex items-center gap-2 active:scale-95 transition-transform cursor-pointer" onclick="location.reload()">
-            <img src="https://i.ibb.co/7NW9gd2F/1000644125-modified.png" class="h-8 w-8 object-contain">
-            <h1 class="text-[10px] font-orbitron font-black text-white uppercase tracking-widest">Jeremy <span class="text-[#22d3ee]">V30</span></h1>
-        </div>
-        <div id="badge-display" class="px-2 py-1 rounded-md text-[8px] font-black uppercase bg-white/5 border border-white/10 text-white italic">ESPERANDO...</div>
-    </header>
+    <!-- HERO SECTUR -->
+    <section class="min-h-screen flex flex-col justify-center items-center px-6 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,160,89,0.1),transparent)]"></div>
+        <h2 class="text-[#c5a059] font-black tracking-[0.5em] uppercase mb-4 text-[10px]">Estatus: Grado Federal SECTUR</h2>
+        <h1 class="text-6xl md:text-8xl font-black font-orbitron leading-none mb-6 italic">
+            MÁS QUE UNA APP. <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#c5a059] to-yellow-200 uppercase">SOBERANÍA.</span>
+        </h1>
+        <p class="text-slate-400 max-w-2xl text-lg font-light mb-12 italic">Protegemos tu patrimonio bajo el Reglamento de la Ley General de Turismo.</p>
+        <button onclick="scrollToContact()" class="btn-raymex px-12 py-5 rounded-2xl">Iniciar Registro Seguro</button>
+    </section>
 
-    <main id="matrix-flow"></main>
-
-    <footer class="console-footer">
-        <div class="flex items-center gap-2 max-w-5xl mx-auto">
-            <div class="flex-grow bg-slate-900/80 rounded-xl border border-white/10 flex items-center px-3">
-                <textarea id="matrix-input" placeholder="Dictar orden..." class="w-full bg-transparent py-3 text-[15px] text-white outline-none h-11 resize-none"></textarea>
-                <button onclick="sendCommand()" class="p-2 text-[#22d3ee] active:scale-75"><i class="fa-solid fa-paper-plane text-lg"></i></button>
+    <!-- FORMULARIO DE CAPTURA SEGURA -->
+    <section id="contacto" class="py-24 px-6 bg-slate-950">
+        <div class="max-w-2xl mx-auto glass p-10 md:p-16 rounded-[3.5rem] border-t-4 border-[#c5a059] shadow-2xl relative">
+            <div id="form-body">
+                <div class="text-center mb-10">
+                    <h3 class="text-2xl font-orbitron font-black uppercase italic italic text-[#c5a059]">Auditoría Inicial</h3>
+                    <p class="text-slate-500 mt-2 text-[10px] font-black uppercase tracking-widest">Jeremy procesará sus datos confidencialmente</p>
+                </div>
+                
+                <div class="space-y-6">
+                    <input type="text" id="lead_name" placeholder="Nombre Completo" class="w-full bg-slate-900 border border-white/5 rounded-2xl p-5 outline-none focus:border-[#c5a059] text-white font-bold text-sm uppercase">
+                    <input type="tel" id="lead_tel" placeholder="WhatsApp de Contacto" class="w-full bg-slate-900 border border-white/5 rounded-2xl p-5 outline-none focus:border-[#c5a059] text-white font-bold text-sm">
+                    <select id="lead_goal" class="w-full bg-slate-900 border border-white/5 rounded-2xl p-5 outline-none focus:border-[#c5a059] text-white font-bold text-sm appearance-none uppercase">
+                        <option value="operador">Operador de Activo (ROAD)</option>
+                        <option value="inversionista">Socio Inversionista (BIZ)</option>
+                        <option value="saas">Licencia de Software (SaaS)</option>
+                    </select>
+                    <button id="submit-btn" onclick="saveToBunker()" class="w-full btn-raymex py-5 rounded-2xl shadow-lg mt-8 flex justify-center items-center gap-3">
+                        <span id="btn-text">Enviar a Jeremy</span>
+                    </button>
+                </div>
             </div>
-            <div onclick="startVoiceAction()" class="nexus-btn active:scale-90"><i id="mic-icon" class="fa-solid fa-microphone text-black text-lg"></i></div>
+            
+            <div id="success-msg" class="hidden text-center py-10">
+                <i class="fa-solid fa-shield-halved text-5xl text-green-500 mb-6 animate-pulse"></i>
+                <h4 class="text-xl font-black uppercase">Datos Blindados</h4>
+                <p class="text-slate-400 mt-2 italic">Redirigiendo al canal de cierre...</p>
+            </div>
         </div>
+    </section>
+
+    <footer class="py-12 text-center text-slate-700 text-[8px] font-black uppercase tracking-[0.4em]">
+        © 2026 GRUPO RAYMEX | INFRAESTRUCTURA SOBERANA | SECTUR COMPLIANT
     </footer>
 
-    <script>
-        const URL_VERCEL = "https://jeremy-core-v23.vercel.app/api/chat";
-        let currentAuth = "";
+    <!-- NEXO CON EL BÚNKER (FIREBASE) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        function speak(text) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const msg = new SpeechSynthesisUtterance(text.replace(/[*_#]/g, ''));
-                msg.lang = 'es-MX';
-                window.speechSynthesis.speak(msg);
-            }
-        }
+        const firebaseConfig = JSON.parse(window.__firebase_config || '{}');
+        const appId = window.__app_id || 'raymex-v37';
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-        function authenticateKey() {
-            const key = document.getElementById('vault-key').value.trim().toUpperCase();
-            if (['RUIZ_MASTER', 'CONTADOR_MASTER', 'ABOGADO_MASTER', 'ROBERT_SENTINEL'].includes(key)) {
-                currentAuth = key;
-                document.getElementById('badge-display').innerText = currentAuth + " ACTIVE";
-                document.getElementById('access-vault').style.display = 'none';
-                const welcome = "Sistemas Raymex operando en tiempo real. Bienvenida, autoridad " + currentAuth;
-                appendLog('jeremy', welcome);
-                speak(welcome);
-            } else { alert("ACCESO DENEGADO"); }
-        }
+        window.saveToBunker = async () => {
+            const name = document.getElementById('lead_name').value;
+            const tel = document.getElementById('lead_tel').value;
+            const goal = document.getElementById('lead_goal').value;
+            const btn = document.getElementById('submit-btn');
 
-        function appendLog(role, text) {
-            const flow = document.getElementById('matrix-flow');
-            const div = document.createElement('div');
-            div.className = `flex gap-3 ${role === 'user' ? 'flex-row-reverse' : ''}`;
-            div.innerHTML = `<div class="w-8 h-8 rounded-lg ${role==='user'?'bg-slate-700':'bg-[#22d3ee]'} flex items-center justify-center shrink-0"><i class="fa-solid ${role==='user'?'fa-user-tie':'fa-robot'} text-[10px] ${role==='user'?'text-white':'text-black'}"></i></div><div class="glass p-3 rounded-xl max-w-[85%] ${role==='user'?'border-r-2 border-amber-500':'border-l-2 border-[#22d3ee]'}"><p class="text-[14px] text-slate-200">${text}</p></div>`;
-            flow.appendChild(div);
-            flow.scrollTop = flow.scrollHeight;
-        }
+            if(!name || !tel) return alert("Director, faltan datos para el peritaje.");
 
-        async function sendCommand(manualText = null) {
-            const input = document.getElementById('matrix-input');
-            const text = manualText || input.value.trim();
-            if(!text) return;
-            appendLog('user', text);
-            input.value = '';
-            const thinkId = 'think-' + Date.now();
-            appendLog('jeremy', `<span id="${thinkId}" class="animate-pulse">Consultando Sapiencia...</span>`);
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loader"></span> <span>Auditando...</span>';
+
             try {
-                const response = await fetch(URL_VERCEL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: text, authority: currentAuth })
-                });
-                const data = await response.json();
-                const aiText = data.candidates[0].content.parts[0].text;
-                document.getElementById(thinkId).parentElement.innerHTML = aiText;
-                speak(aiText);
-            } catch (e) { document.getElementById(thinkId).parentElement.innerHTML = "Error de núcleo. Reintente."; }
-        }
+                await signInAnonymously(auth);
+                const user = auth.currentUser;
 
-        function startVoiceAction() {
-            const mic = document.getElementById('mic-icon');
-            const SpeechRec = window.webkitSpeechRecognition || window.SpeechRecognition;
-            if (SpeechRec) {
-                const rec = new SpeechRec();
-                rec.lang = 'es-MX';
-                rec.onstart = () => mic.className = "fa-solid fa-wave-square animate-pulse text-white";
-                rec.onresult = (e) => {
-                    mic.className = "fa-solid fa-microphone text-black";
-                    sendCommand(e.results[0][0].transcript);
-                };
-                rec.onerror = () => mic.className = "fa-solid fa-microphone text-black";
-                rec.start();
+                if (user) {
+                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'leads'), {
+                        name, tel, goal, timestamp: serverTimestamp(), source: 'SITIO_PUBLICO'
+                    });
+
+                    document.getElementById('form-body').classList.add('hidden');
+                    document.getElementById('success-msg').classList.remove('hidden');
+
+                    setTimeout(() => {
+                        const msg = `Soberania Raymex:%0A%0AInicia peritaje para ${name}.%0AInteres: ${goal}`;
+                        window.location.href = `https://wa.me/529986177700?text=${msg}`;
+                    }, 2000);
+                }
+            } catch (e) {
+                alert("Error de enlace. Reintente.");
+                btn.disabled = false;
+                btn.innerHTML = 'Enviar a Jeremy';
             }
-        }
+        };
+
+        window.scrollToContact = () => document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
     </script>
 </body>
 </html>
