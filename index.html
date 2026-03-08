@@ -50,9 +50,8 @@
     </footer>
 
     <script>
-        // === TUNEL SEGURO HACIA VERCEL ===
-        // PEGUE EL ENLACE QUE COPIÓ DE VERCEL AQUÍ ABAJO Y ASEGÚRESE DE QUE TERMINE EN /api/chat
-        ​const URL_VERCEL = "https://jeremy-core-v23.vercel.app/api/chat";
+        // === TUNEL SEGURO HACIA VERCEL YA ENSAMBLADO ===
+        const URL_VERCEL = "https://jeremy-core-v23.vercel.app/api/chat"; 
         
         let currentAuthority = "";
 
@@ -62,8 +61,10 @@
                 currentAuthority = key.split('_')[0];
                 document.getElementById('badge-display').innerText = currentAuthority + " ACTIVE";
                 document.getElementById('access-vault').style.display = 'none';
-                appendLog('jeremy', "Director Ruiz, túnel seguro Vercel establecido. Inteligencia operativa al 100%. ¿Iniciamos la demostración del sistema?");
-            } else { alert("ACCESO DENEGADO"); }
+                appendLog('jeremy', "Director Ruiz, túnel seguro Vercel establecido. Inteligencia operativa al 100%. ¿Iniciamos la demostración del sistema para nuestro cliente?");
+            } else { 
+                alert("ACCESO DENEGADO - VERIFIQUE SU LLAVE"); 
+            }
         }
 
         function appendLog(role, text) {
@@ -118,7 +119,7 @@
                 document.getElementById(thinkId).parentElement.innerHTML = data.candidates[0].content.parts[0].text;
                 setTimeout(() => { document.getElementById('matrix-flow').scrollTop = document.getElementById('matrix-flow').scrollHeight; }, 100);
             } catch (e) {
-                document.getElementById(thinkId).parentElement.innerHTML = "Fallo de conexión. Revise que la línea 126 del código en GitHub tenga el enlace correcto de Vercel terminando en /api/chat.";
+                document.getElementById(thinkId).parentElement.innerHTML = "Fallo de conexión. Revise la red.";
             }
         }
 
