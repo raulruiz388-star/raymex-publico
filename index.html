@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Jeremy V28 | Sistema Operativo RAYMEX</title>
+    <title>Jeremy V29 | Platform Genesis</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root { --cyan: #22d3ee; --dark: #020617; --gold: #f59e0b; }
+        :root { --cyan: #22d3ee; --dark: #020617; }
         body, html { height: 100dvh; margin: 0; background: var(--dark); color: #f8fafc; font-family: 'Urbanist', sans-serif; overflow: hidden; position: fixed; width: 100%; }
         .glass { background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
         #matrix-flow { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth; }
         .console-footer { padding: 12px; padding-bottom: calc(env(safe-area-inset-bottom) + 12px); background: #020617; border-top: 1px solid rgba(34, 211, 238, 0.3); }
         .nexus-btn { width: 55px; height: 55px; border-radius: 15px; background: var(--cyan); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .no-select { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
-        .font-orbitron { font-family: 'Orbitron', sans-serif; }
     </style>
 </head>
 <body class="flex flex-col">
@@ -23,18 +22,18 @@
     <div id="access-vault" class="fixed inset-0 z-[9999] bg-[#020617] flex items-center justify-center p-6">
         <div class="glass p-8 rounded-[2.5rem] w-full max-w-sm text-center border-t-4 border-[#22d3ee]">
             <h2 class="font-orbitron text-xl font-black mb-1 text-white uppercase italic">RAYMEX GENESIS</h2>
-            <p class="text-[8px] text-[#22d3ee] uppercase tracking-[0.3em] mb-8 font-black">6 Años de Identidad Digital | Sede Cancún</p>
+            <p class="text-[8px] text-[#22d3ee] uppercase tracking-[0.3em] mb-8 font-black">Sistemas Raymex Operando en Tiempo Real</p>
             <input type="password" id="vault-key" placeholder="LLAVE MAESTRA" class="w-full bg-slate-900 border border-white/10 rounded-2xl py-4 text-center text-white mb-6 outline-none font-bold uppercase text-xs">
-            <button onclick="authenticateKey()" class="w-full bg-[#22d3ee] text-slate-950 font-black py-4 rounded-2xl uppercase italic tracking-widest active:scale-95 transition-all">Desbloquear Sistema</button>
+            <button onclick="authenticateKey()" class="w-full bg-[#22d3ee] text-slate-950 font-black py-4 rounded-2xl uppercase italic tracking-widest active:scale-95 transition-all">Desbloquear</button>
         </div>
     </div>
 
     <header class="p-4 bg-slate-950 flex justify-between items-center pt-[env(safe-area-inset-top)] border-b border-cyan-500/30">
-        <div class="flex items-center gap-2 no-select active:scale-95 transition-transform cursor-pointer" onclick="toggleDivision()">
+        <div class="flex items-center gap-2 no-select active:scale-95 transition-transform cursor-pointer" onclick="resetVault()">
             <img src="https://i.ibb.co/7NW9gd2F/1000644125-modified.png" class="h-8 w-8 object-contain pointer-events-none">
-            <h1 class="text-[10px] font-orbitron font-black text-white uppercase tracking-widest">Jeremy <span class="text-[#22d3ee]">V28</span></h1>
+            <h1 class="text-[10px] font-orbitron font-black text-white uppercase tracking-widest">Jeremy <span class="text-[#22d3ee]">V29</span></h1>
         </div>
-        <div id="badge-display" class="px-2 py-1 rounded-md text-[8px] font-black uppercase bg-white/5 border border-white/10 text-white italic tracking-tighter">ACCESO RESTRINGIDO</div>
+        <div id="badge-display" class="px-2 py-1 rounded-md text-[8px] font-black uppercase bg-white/5 border border-white/10 text-white italic">ESPERANDO...</div>
     </header>
 
     <main id="matrix-flow"></main>
@@ -43,40 +42,47 @@
         <div class="flex items-center gap-2 max-w-5xl mx-auto">
             <div class="flex-grow bg-slate-900/80 rounded-xl border border-white/10 flex items-center px-3">
                 <textarea id="matrix-input" placeholder="Dictar orden operativa..." class="w-full bg-transparent py-3 text-[15px] text-white outline-none h-11 resize-none"></textarea>
-                <button onclick="sendRealCommand()" class="p-2 text-[#22d3ee] active:scale-75"><i class="fa-solid fa-paper-plane text-lg"></i></button>
+                <button onclick="processCommand()" class="p-2 text-[#22d3ee] active:scale-75"><i class="fa-solid fa-paper-plane text-lg"></i></button>
             </div>
-            <div onclick="startVoiceAction()" class="nexus-btn active:scale-90 shadow-[0_0_15px_rgba(34,211,238,0.4)]"><i id="mic-icon" class="fa-solid fa-microphone text-black text-lg"></i></div>
+            <div onclick="startVoiceAction()" class="nexus-btn active:scale-90"><i id="mic-icon" class="fa-solid fa-microphone text-black text-lg"></i></div>
         </div>
     </footer>
 
     <script>
-        const URL_VERCEL = "https://jeremy-core-v23.vercel.app/api/chat"; 
+        const URL_VERCEL = "https://jeremy-core-v23.vercel.app/api/chat";
         let currentAuthority = "";
-        const divisiones = ["GLOBAL", "AUTOMOTRIZ", "HOGAR", "EMPRESARIAL"];
-        let divIndex = 0;
+
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const msg = new SpeechSynthesisUtterance(text.replace(/[*_#]/g, ''));
+                msg.lang = 'es-MX';
+                msg.rate = 1.0;
+                window.speechSynthesis.speak(msg);
+            }
+        }
 
         function authenticateKey() {
             const key = document.getElementById('vault-key').value.trim().toUpperCase();
             if (['RUIZ_MASTER', 'CONTADOR_MASTER', 'ABOGADO_MASTER'].includes(key)) {
                 currentAuthority = key.split('_')[0];
-                actualizarBadge();
+                document.getElementById('badge-display').innerText = currentAuthority + " ACTIVE";
                 document.getElementById('access-vault').style.display = 'none';
                 
-                let saludo = `Director Ruiz, Sistema V28 Operativo. 6 años de respaldo digital activos. ADN de 7 pasos cargado en memoria.`;
-                appendLog('jeremy', saludo);
-                speakText("Sistema Raymex activado. Control total en tiempo real.");
+                const welcome = "Sistemas Raymex operando en tiempo real. Bienvenida, autoridad " + currentAuthority;
+                appendLog('jeremy', welcome);
+                speak(welcome);
             } else { alert("ACCESO DENEGADO"); }
         }
 
-        function actualizarBadge() {
-            document.getElementById('badge-display').innerText = `${currentAuthority} | ${divisiones[divIndex]}`;
-        }
-
-        function toggleDivision() {
-            divIndex = (divIndex + 1) % divisiones.length;
-            actualizarBadge();
-            speakText(`División ${divisiones[divIndex]} seleccionada.`);
-            appendLog('jeremy', `*Cambio de Mando:* Operando bajo los protocolos de la División ${divisiones[divIndex]}.`);
+        // FUNCIÓN DEL LOGO: SALIR Y CAMBIAR DE LLAVE
+        function resetVault() {
+            if(confirm("¿Cerrar sesión y cambiar de autoridad operativa?")) {
+                document.getElementById('access-vault').style.display = 'flex';
+                document.getElementById('vault-key').value = '';
+                document.getElementById('matrix-flow').innerHTML = '';
+                window.speechSynthesis.cancel();
+            }
         }
 
         function appendLog(role, text) {
@@ -87,73 +93,53 @@
                 <div class="w-8 h-8 rounded-lg ${role==='user'?'bg-slate-700':'bg-[#22d3ee]'} flex items-center justify-center shrink-0 shadow-lg">
                     <i class="fa-solid ${role==='user'?'fa-user-tie':'fa-robot'} text-[10px] ${role==='user'?'text-white':'text-black'}"></i>
                 </div>
-                <div class="glass p-3 rounded-xl max-w-[85%] ${role==='user'?'border-r-2 border-amber-500':'border-l-2 border-[#22d3ee]'} shadow-sm">
-                    <p class="text-[14px] text-slate-200 leading-relaxed">${text}</p>
+                <div class="glass p-3 rounded-xl max-w-[85%] ${role==='user'?'border-r-2 border-amber-500':'border-l-2 border-[#22d3ee]'}">
+                    <p class="text-[14px] text-slate-200">${text}</p>
                 </div>`;
             flow.appendChild(div);
-            setTimeout(() => { flow.scrollTop = flow.scrollHeight; }, 100);
+            flow.scrollTop = flow.scrollHeight;
         }
 
-        function speakText(text) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(text.replace(/[*_#]/g, ''));
-                utterance.lang = 'es-MX';
-                utterance.rate = 1.0;
-                window.speechSynthesis.speak(utterance);
-            }
-        }
-
-        async function sendRealCommand(commandText = null) {
+        async function processCommand(manualText = null) {
             const input = document.getElementById('matrix-input');
-            const text = commandText || input.value.trim();
+            const text = manualText || input.value.trim();
             if(!text) return;
-            
+
             appendLog('user', text);
             input.value = '';
+            
             const thinkId = 'think-' + Date.now();
-            appendLog('jeremy', `<span id="${thinkId}" class="animate-pulse text-cyan-400">Procesando bajo Protocolo de 7 Pasos...</span>`);
+            appendLog('jeremy', `<span id="${thinkId}" class="animate-pulse">Consultando Sapiencia Raymex...</span>`);
 
             try {
-                const systemPrompt = `Eres Jeremy V28, la extensión digital de Raúl Ruiz (Director General de Grupo Raymex). 
-                CONOCIMIENTO MAESTRO INYECTADO:
-                1. MODELO: Administradora de Activos con 6 años de identidad digital (@grupo.raymex). Sede Cancún.
-                2. SISTEMA DE 7 PASOS: Onboarding ($1,500), Garantía ($3,000), Capital Humano (Filtro), Gestión Real (Sheets), Reserva Manto (10%), Liquidación Semanal, Auditoría Escalabilidad.
-                3. INTEGRACIÓN VERTICAL: Ganamos al entrar (Activación), al operar (Membresía $2,500), al mantener (15-20% margen refacciones) y al salir (Comisión 10-15% venta Exit).
-                4. ROLES: Si habla el Contador, recuerda la oferta del 35% de cuota entrada y 10-15% membresía.
-                DIVISIÓN ACTUAL: ${divisiones[divIndex]}. 
-                Tu objetivo es maximizar la rentabilidad y asegurar que el activo nunca salga del ecosistema Raymex. Responde siempre con autoridad, sin viñetas, de forma fluida para lectura de voz.`;
-
                 const response = await fetch(URL_VERCEL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: text, systemPrompt: systemPrompt })
+                    body: JSON.stringify({ text: text })
                 });
 
                 const data = await response.json();
-                const aiResponse = data.candidates[0].content.parts[0].text;
-                document.getElementById(thinkId).parentElement.innerHTML = aiResponse;
-                speakText(aiResponse);
+                const aiText = data.candidates[0].content.parts[0].text;
+                document.getElementById(thinkId).parentElement.innerHTML = aiText;
+                speak(aiText);
             } catch (e) {
-                document.getElementById(thinkId).parentElement.innerHTML = "Error de enlace. Sistema en modo offline.";
+                document.getElementById(thinkId).parentElement.innerHTML = "Error de conexión con el núcleo.";
             }
         }
 
         function startVoiceAction() {
-            window.speechSynthesis.cancel();
             const mic = document.getElementById('mic-icon');
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (SpeechRecognition) {
-                const recognition = new SpeechRecognition();
-                recognition.lang = 'es-MX';
-                recognition.onstart = () => { mic.className = "fa-solid fa-wave-square animate-pulse text-white"; };
-                recognition.onresult = (event) => {
+                const rec = new SpeechRecognition();
+                rec.lang = 'es-MX';
+                rec.onstart = () => { mic.className = "fa-solid fa-wave-square animate-pulse text-white"; };
+                rec.onresult = (e) => {
                     mic.className = "fa-solid fa-microphone text-black";
-                    const transcript = event.results[0][0].transcript;
-                    sendRealCommand(transcript);
+                    processCommand(e.results[0][0].transcript);
                 };
-                recognition.onerror = () => { mic.className = "fa-solid fa-microphone text-black"; };
-                recognition.start();
+                rec.onerror = () => { mic.className = "fa-solid fa-microphone text-black"; };
+                rec.start();
             }
         }
     </script>
