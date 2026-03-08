@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>ROAD RAYMEX | Registro Federal de Soberanía</title>
+    <title>ROAD RAYMEX | Registro Federal SECTUR</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;600;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
-        :root { --gold: #c5a059; --dark: #020617; --cyan: #22d3ee; }
+        :root { --gold: #c5a059; --dark: #020617; }
         body { font-family: 'Urbanist', sans-serif; background: var(--dark); color: white; scroll-behavior: smooth; }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
@@ -29,18 +29,20 @@
         </div>
     </nav>
 
-    <!-- HERO SECTUR -->
+    <!-- HERO SECTION -->
     <section class="min-h-screen flex flex-col justify-center items-center px-6 text-center relative overflow-hidden">
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,160,89,0.1),transparent)]"></div>
         <h2 class="text-[#c5a059] font-black tracking-[0.5em] uppercase mb-4 text-[10px]">Estatus: Grado Federal SECTUR</h2>
-        <h1 class="text-6xl md:text-8xl font-black font-orbitron leading-none mb-6 italic">
-            MÁS QUE UNA APP. <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#c5a059] to-yellow-200 uppercase">SOBERANÍA.</span>
+        <h1 class="text-6xl md:text-8xl font-black font-orbitron leading-none mb-6 italic uppercase">
+            Más que una App, <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#c5a059] to-yellow-200">Soberanía.</span>
         </h1>
-        <p class="text-slate-400 max-w-2xl text-lg font-light mb-12 italic">Protegemos tu patrimonio bajo el Reglamento de la Ley General de Turismo.</p>
+        <p class="text-slate-400 max-w-2xl text-lg font-light mb-12 italic">Protegemos tu patrimonio bajo el Reglamento de la Ley General de Turismo (Octubre 2018).</p>
+        
+        <!-- FUNCIÓN: Desplazamiento al formulario -->
         <button onclick="scrollToContact()" class="btn-raymex px-12 py-5 rounded-2xl">Iniciar Registro Seguro</button>
     </section>
 
-    <!-- FORMULARIO DE CAPTURA SEGURA -->
+    <!-- SECCIÓN DE AUDITORÍA (CONTACTO) -->
     <section id="contacto" class="py-24 px-6 bg-slate-950">
         <div class="max-w-2xl mx-auto glass p-10 md:p-16 rounded-[3.5rem] border-t-4 border-[#c5a059] shadow-2xl relative">
             <div id="form-body">
@@ -57,6 +59,8 @@
                         <option value="inversionista">Socio Inversionista (BIZ)</option>
                         <option value="saas">Licencia de Software (SaaS)</option>
                     </select>
+                    
+                    <!-- FUNCIÓN: Envío de datos al Búnker y WhatsApp -->
                     <button id="submit-btn" onclick="saveToBunker()" class="w-full btn-raymex py-5 rounded-2xl shadow-lg mt-8 flex justify-center items-center gap-3">
                         <span id="btn-text">Enviar a Jeremy</span>
                     </button>
@@ -65,8 +69,8 @@
             
             <div id="success-msg" class="hidden text-center py-10">
                 <i class="fa-solid fa-shield-halved text-5xl text-green-500 mb-6 animate-pulse"></i>
-                <h4 class="text-xl font-black uppercase">Datos Blindados</h4>
-                <p class="text-slate-400 mt-2 italic">Redirigiendo al canal de cierre...</p>
+                <h4 class="text-xl font-black uppercase italic">Datos Blindados</h4>
+                <p class="text-slate-400 mt-2 italic italic">Jeremy ha registrado su postulación. Redirigiendo...</p>
             </div>
         </div>
     </section>
@@ -75,12 +79,12 @@
         © 2026 GRUPO RAYMEX | INFRAESTRUCTURA SOBERANA | SECTUR COMPLIANT
     </footer>
 
-    <!-- NEXO CON EL BÚNKER (FIREBASE) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // Configuración de Seguridad
         const firebaseConfig = JSON.parse(window.__firebase_config || '{}');
         const appId = window.__app_id || 'raymex-v37';
         
@@ -88,42 +92,48 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // FUNCIÓN MAESTRA DE ENVÍO
         window.saveToBunker = async () => {
             const name = document.getElementById('lead_name').value;
             const tel = document.getElementById('lead_tel').value;
             const goal = document.getElementById('lead_goal').value;
             const btn = document.getElementById('submit-btn');
 
-            if(!name || !tel) return alert("Director, faltan datos para el peritaje.");
+            if(!name || !tel) return alert("Director, faltan datos para iniciar el peritaje.");
 
             btn.disabled = true;
-            btn.innerHTML = '<span class="loader"></span> <span>Auditando...</span>';
+            btn.innerHTML = '<span class="loader"></span> <span>Procesando...</span>';
 
             try {
+                // Auth antes de Query (Regla 3)
                 await signInAnonymously(auth);
                 const user = auth.currentUser;
 
                 if (user) {
+                    // Guardado en Path Estricto (Regla 1)
                     await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'leads'), {
-                        name, tel, goal, timestamp: serverTimestamp(), source: 'SITIO_PUBLICO'
+                        name, tel, goal, timestamp: serverTimestamp(), source: 'SITIO_PUBLICO_V37_3'
                     });
 
                     document.getElementById('form-body').classList.add('hidden');
                     document.getElementById('success-msg').classList.remove('hidden');
 
                     setTimeout(() => {
-                        const msg = `Soberania Raymex:%0A%0AInicia peritaje para ${name}.%0AInteres: ${goal}`;
+                        const msg = `Soberania Raymex:%0A%0AInicia peritaje inicial para ${name}.%0AInteres: ${goal}%0AContacto: ${tel}`;
                         window.location.href = `https://wa.me/529986177700?text=${msg}`;
                     }, 2000);
                 }
             } catch (e) {
-                alert("Error de enlace. Reintente.");
+                console.error(e);
+                alert("Fallo de enlace táctico. Intente de nuevo.");
                 btn.disabled = false;
                 btn.innerHTML = 'Enviar a Jeremy';
             }
         };
 
-        window.scrollToContact = () => document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
+        window.scrollToContact = () => {
+            document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
+        };
     </script>
 </body>
 </html>
